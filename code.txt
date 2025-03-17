@@ -1,3 +1,5 @@
+
+
 import * as React from "react";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
@@ -50,59 +52,45 @@ function Cadastro() {
     >
       <Box //header
         sx={{
-          backgroundColor: "#C91E1E",
-          height: "50px",
+          backgroundColor: "#AE0000",
+          height: "40px",
           width: "100%",
-          position: "fixed",
-          top: 0,
-          left: 0,
-          zIndex: 1000,
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center"
         }}
       />
 
-      <Box
+      <Container
+        component="main"
+        maxWidth="xs"
         sx={{
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
-          position: "fixed",
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-          zIndex: 900,
-          pointerEvents: "none", // Permite clicar em elementos abaixo
+          height: "calc(100vh - 80px)", // Subtract height of top and bottom bars
         }}
       >
         <Box
           sx={{
+            marginTop: 8,
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
             backgroundColor: "#AE0000",
-            padding: 2.5, // Reduzido de 3 para 2.5
+            padding: 4,
             borderRadius: 2,
-            boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
-            width: "320px", // Tamanho fixo mais reduzido
-            maxHeight: "80vh",
-            overflowY: "auto",
-            pointerEvents: "auto", // Permite interação com este elemento
+            boxShadow: "none",
           }}
         >
-          <Box sx={{ marginBottom: 1 }}>
+          <Box sx={{ marginBottom: 2 }}>
             <img
               src={senaiLogo}
               alt="SENAI Logo"
-              style={{ height: "45px", borderRadius: 2 }} // Reduzido de 55px para 45px
+              style={{ height: "65px", borderRadius: 2 }}
             />
           </Box>
 
           <Box
             component="form"
-            sx={{ mt: 0.5, width: "100%" }} // Reduzido de 1 para 0.5
+            sx={{ mt: 1 }}
             onSubmit={handleSubmit}
             noValidate
           >
@@ -112,12 +100,11 @@ function Cadastro() {
               id="nome"
               placeholder="Nome"
               name="nome"
-              margin="dense"
+              margin="normal"
               value={user.nome}
               onChange={onChange}
-              size="small"
               sx={{
-                marginBottom: 1,
+                marginBottom: 2,
                 backgroundColor: "white",
                 borderRadius: 1,
               }}
@@ -128,12 +115,11 @@ function Cadastro() {
               id="email"
               placeholder="Email"
               name="email"
-              margin="dense"
+              margin="normal"
               value={user.email}
               onChange={onChange}
-              size="small" // Adicionado para diminuir ainda mais o tamanho
               sx={{
-                marginBottom: 1,
+                marginBottom: 2,
                 backgroundColor: "white",
                 borderRadius: 1,
               }}
@@ -144,12 +130,11 @@ function Cadastro() {
               id="cpf"
               placeholder="CPF"
               name="cpf"
-              margin="dense"
+              margin="normal"
               value={user.cpf}
               onChange={onChange}
-              size="small" // Adicionado para diminuir ainda mais o tamanho
               sx={{
-                marginBottom: 1,
+                marginBottom: 2,
                 backgroundColor: "white",
                 borderRadius: 1,
               }}
@@ -160,26 +145,23 @@ function Cadastro() {
               id="senha"
               placeholder="Senha"
               name="senha"
-              margin="dense"
+              margin="normal"
               type="password"
               value={user.senha}
               onChange={onChange}
-              size="small" // Adicionado para diminuir ainda mais o tamanho
               sx={{
-                marginBottom: 1,
+                marginBottom: 2,
                 backgroundColor: "white",
                 borderRadius: 1,
               }}
             />
             <Button
               sx={{
-                mt: 0.5, // Reduzido de 1 para 0.5
-                mb: 1.5, // Reduzido de 2 para 1.5
+                mt: 1,
+                mb: 3,
                 backgroundColor: "#FF2A2A",
                 borderRadius: 1,
                 boxShadow: "none",
-                padding: "6px 12px", // Tamanho reduzido para o botão
-                fontSize: "0.875rem", // Texto menor
               }}
               fullWidth
               type="submit"
@@ -194,14 +176,13 @@ function Cadastro() {
                 alignItems: "center",
                 justifyContent: "center",
                 color: "white",
-                fontSize: "0.75rem", // Texto menor para o link
               }}
             >
-              <Typography variant="body2" sx={{ color: "white", mr: 1, fontSize: "0.75rem" }}>
+              <Typography variant="body2" sx={{ color: "white", mr: 1 }}>
                 Já tem cadastro?
               </Typography>
               <Link
-                to="/"
+                to="/login"
                 style={{
                   color: "#FF9696",
                   textDecoration: "none",
@@ -213,16 +194,13 @@ function Cadastro() {
             </Box>
           </Box>
         </Box>
-      </Box>
+      </Container>
       <Box
         sx={{
-          backgroundColor: "#C91E1E",
-          height: "50px",
+          backgroundColor: "#c62828",
+          height: "20px",
           width: "100%",
-          position: "fixed",
-          bottom: 0,
-          left: 0,
-          zIndex: 1000,
+          marginTop: "auto",
         }}
       />
     </Box>

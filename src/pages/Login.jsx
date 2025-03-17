@@ -2,7 +2,6 @@ import * as React from "react";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
-import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
 import { useState } from "react";
 import { Link } from "react-router-dom";
@@ -45,102 +44,145 @@ function Login() {
       flexDirection: "column",
     }}>
       <Box sx={{ 
-        backgroundColor: "#AE0000", 
-        height: "40px", 
-        width: "100%" 
+        backgroundColor: "#C91E1E",
+        height: "50px",
+        width: "100%",
+        position: "fixed",
+        top: 0,
+        left: 0,
+        zIndex: 1000,
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center"
       }} />
 
-    <Container component="main" maxWidth="xs">
       <Box
         sx={{
-          marginTop: 8,
           display: "flex",
-          flexDirection: "column",
+          justifyContent: "center",
           alignItems: "center",
-          backgroundColor: "#AE0000",
-          padding: 4,
-          borderRadius: 2,
-          boxShadow: "none",
-         
+          position: "fixed",
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          zIndex: 900,
+          pointerEvents: "none", // Permite clicar em elementos abaixo
         }}
       >
-        <Box sx={{ marginBottom: 2 }}>
-          <img
-            src={senaiLogo}
-            alt="SENAI Logo"
-            style={{ height: "65px", borderRadius: 2 }}
-          />
-        </Box>
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            backgroundColor: "#AE0000",
+            padding: 2.5,
+            borderRadius: 2,
+            boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
+            width: "320px", // Tamanho fixo mais reduzido
+            maxHeight: "80vh",
+            overflowY: "auto",
+            pointerEvents: "auto", // Permite interação com este elemento
+          }}
+        >
+          <Box sx={{ marginBottom: 1 }}>
+            <img
+              src={senaiLogo}
+              alt="SENAI Logo"
+              style={{ height: "45px", borderRadius: 2 }}
+            />
+          </Box>
 
-        <Box component="form" sx={{ mt: 1 }} onSubmit={handleSubmit} noValidate>
-          <TextField
-            required
-            fullWidth
-            id="email"
-            placeholder="Email"
-            name="email"
-            margin="normal"
-            value={user.email}
-            onChange={onChange}
-            sx={{
-              marginBottom: 2,
-              backgroundColor: "white",
-              borderRadius: 1,
-            }}
-          />
-          <TextField
-            required
-            fullWidth
-            id="senha"
-            placeholder="Senha"
-            name="senha"
-            margin="normal"
-            type="password"
-            value={user.password}
-            onChange={onChange}
-            sx={{
-              marginBottom: 2,
-              backgroundColor: "white",
-              borderRadius: 1,
-            }}
-          />
-          <Button
-            sx={{
-              mt: 1,
-              mb: 3,
-              backgroundColor: "#FF2A2A",
-              borderRadius: 1,
-              boxShadow: "none",
-            }}
-            fullWidth
-            type="submit"
-            variant="contained"
+          <Box 
+            component="form" 
+            sx={{ mt: 0.5, width: "100%" }} 
+            onSubmit={handleSubmit} 
+            noValidate
           >
-            Login
-          </Button>
+            <TextField
+              required
+              fullWidth
+              id="email"
+              placeholder="Email"
+              name="email"
+              margin="dense"
+              size="small"
+              value={user.email}
+              onChange={onChange}
+              sx={{
+                marginBottom: 1,
+                backgroundColor: "white",
+                borderRadius: 1,
+              }}
+            />
+            <TextField
+              required
+              fullWidth
+              id="senha"
+              placeholder="Senha"
+              name="senha"
+              margin="dense"
+              size="small"
+              type="password"
+              value={user.senha}
+              onChange={onChange}
+              sx={{
+                marginBottom: 1,
+                backgroundColor: "white",
+                borderRadius: 1,
+              }}
+            />
+            <Button
+              sx={{
+                mt: 0.5,
+                mb: 1.5,
+                backgroundColor: "#FF2A2A",
+                borderRadius: 1,
+                boxShadow: "none",
+                padding: "6px 12px",
+                fontSize: "0.875rem",
+              }}
+              fullWidth
+              type="submit"
+              variant="contained"
+            >
+              Login
+            </Button>
 
-          <Box sx={{ 
-              display: "flex", 
-              alignItems: "center", 
-              justifyContent: "center",
-              color: "white"
-            }}>
-            <Typography variant="body2" sx={{ color: "white", mr: 1 }}>
-              Não tem cadastro?
-            </Typography>
-            <Link to="/cadastro"  style={{ color: "#FF9696", textDecoration: "none", fontFamily: "Arial, sans-serif"}}>
-              Cadastrar-se
-            </Link>
+            <Box sx={{ 
+                display: "flex", 
+                alignItems: "center", 
+                justifyContent: "center",
+                color: "white",
+                fontSize: "0.75rem",
+              }}>
+              <Typography variant="body2" sx={{ color: "white", mr: 1, fontSize: "0.75rem" }}>
+                Não tem cadastro?
+              </Typography>
+              <Link 
+                to="/cadastro" 
+                style={{ 
+                  color: "#FF9696", 
+                  textDecoration: "none", 
+                  fontFamily: "Arial, sans-serif"
+                }}
+              >
+                Cadastrar-se
+              </Link>
+            </Box>
           </Box>
         </Box>
       </Box>
-    </Container>
-    <Box sx={{ 
-        backgroundColor: "#c62828", 
-        height: "40px", 
-        width: "100%",
-        marginTop: "auto"
-      }} />
+
+      <Box sx={{ 
+          backgroundColor: "#C91E1E",
+          height: "50px",
+          width: "100%",
+          position: "fixed",
+          bottom: 0,
+          left: 0,
+          zIndex: 1000,
+        }} />
     </Box>
   );
 }

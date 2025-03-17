@@ -7,14 +7,13 @@ import Typography from "@mui/material/Typography";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import api from "../axios/axios";
-import senaiLogo from "../assets/senai_logo.png";
 
 function Cadastro() {
   const [user, setUser] = useState({
     nome: "",
     email: "",
-    cpf: "",
     senha: "",
+    cpf: "",
   });
 
   const onChange = (event) => {
@@ -43,12 +42,13 @@ function Cadastro() {
     <Box
       sx={{
         height: "100vh",
-        backgroundColor: "#FFE9E9",
+        backgroundColor: "#FFF1F1",
         display: "flex",
         flexDirection: "column",
       }}
     >
-      <Box //header
+      {/* Header */}
+      <Box
         sx={{
           backgroundColor: "#C91E1E",
           height: "50px",
@@ -63,18 +63,14 @@ function Cadastro() {
         }}
       />
 
-      <Box
+      <Container
+        component="main"
+        maxWidth="sm"
         sx={{
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
-          position: "fixed",
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-          zIndex: 900,
-          pointerEvents: "none", // Permite clicar em elementos abaixo
+          flexGrow: 1,
         }}
       >
         <Box
@@ -82,27 +78,33 @@ function Cadastro() {
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
-            backgroundColor: "#AE0000",
-            padding: 2.5, // Reduzido de 3 para 2.5
+            backgroundColor: "#C91E1E",
+            position: "fixed",
+            padding: 3,
             borderRadius: 2,
-            boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
-            width: "320px", // Tamanho fixo mais reduzido
-            maxHeight: "80vh",
-            overflowY: "auto",
-            pointerEvents: "auto", // Permite interação com este elemento
+            width: "100%",
+            maxWidth: "380px", // Diminuído de 440px
           }}
         >
-          <Box sx={{ marginBottom: 1 }}>
-            <img
-              src={senaiLogo}
-              alt="SENAI Logo"
-              style={{ height: "45px", borderRadius: 2 }} // Reduzido de 55px para 45px
-            />
+          <Box 
+            sx={{ 
+              marginBottom: 3, // Diminuído de 4
+              marginTop: 1,
+              position: "relative",
+              width: "70%",
+              textAlign: "center"
+            }}
+          >
+
+            
+
           </Box>
 
           <Box
             component="form"
-            sx={{ mt: 0.5, width: "100%" }} // Reduzido de 1 para 0.5
+            sx={{ 
+              width: "100%"
+            }}
             onSubmit={handleSubmit}
             noValidate
           >
@@ -112,15 +114,23 @@ function Cadastro() {
               id="nome"
               placeholder="Nome"
               name="nome"
-              margin="dense"
               value={user.nome}
               onChange={onChange}
-              size="small"
               sx={{
-                marginBottom: 1,
+                marginBottom: 1.5, // Diminuído de 2
                 backgroundColor: "white",
-                borderRadius: 1,
+                borderRadius: 2,
+                '& .MuiOutlinedInput-root': {
+                  '& fieldset': {
+                    borderColor: 'transparent',
+                  },
+                  '&:hover fieldset': {
+                    borderColor: 'transparent',
+                  },
+                },
               }}
+              variant="outlined"
+              size="small" // Adicionado para diminuir o campo
             />
             <TextField
               required
@@ -128,31 +138,23 @@ function Cadastro() {
               id="email"
               placeholder="Email"
               name="email"
-              margin="dense"
               value={user.email}
               onChange={onChange}
-              size="small" // Adicionado para diminuir ainda mais o tamanho
               sx={{
-                marginBottom: 1,
+                marginBottom: 1.5, // Diminuído de 2
                 backgroundColor: "white",
-                borderRadius: 1,
+                borderRadius: 2,
+                '& .MuiOutlinedInput-root': {
+                  '& fieldset': {
+                    borderColor: 'transparent',
+                  },
+                  '&:hover fieldset': {
+                    borderColor: 'transparent',
+                  },
+                },
               }}
-            />
-            <TextField
-              required
-              fullWidth
-              id="cpf"
-              placeholder="CPF"
-              name="cpf"
-              margin="dense"
-              value={user.cpf}
-              onChange={onChange}
-              size="small" // Adicionado para diminuir ainda mais o tamanho
-              sx={{
-                marginBottom: 1,
-                backgroundColor: "white",
-                borderRadius: 1,
-              }}
+              variant="outlined"
+              size="small"
             />
             <TextField
               required
@@ -160,26 +162,62 @@ function Cadastro() {
               id="senha"
               placeholder="Senha"
               name="senha"
-              margin="dense"
               type="password"
               value={user.senha}
               onChange={onChange}
-              size="small" // Adicionado para diminuir ainda mais o tamanho
               sx={{
-                marginBottom: 1,
+                marginBottom: 1.5, // Diminuído de 2
                 backgroundColor: "white",
-                borderRadius: 1,
+                borderRadius: 2,
+                '& .MuiOutlinedInput-root': {
+                  '& fieldset': {
+                    borderColor: 'transparent',
+                  },
+                  '&:hover fieldset': {
+                    borderColor: 'transparent',
+                  },
+                },
               }}
+              variant="outlined"
+              size="small"
+            />
+            <TextField
+              required
+              fullWidth
+              id="cpf"
+              placeholder="CPF"
+              name="cpf"
+              value={user.cpf}
+              onChange={onChange}
+              sx={{
+                marginBottom: 2, // Diminuído de 3
+                backgroundColor: "white",
+                borderRadius: 2,
+                '& .MuiOutlinedInput-root': {
+                  '& fieldset': {
+                    borderColor: 'transparent',
+                  },
+                  '&:hover fieldset': {
+                    borderColor: 'transparent',
+                  },
+                },
+              }}
+              variant="outlined"
+              size="small"
             />
             <Button
               sx={{
-                mt: 0.5, // Reduzido de 1 para 0.5
-                mb: 1.5, // Reduzido de 2 para 1.5
-                backgroundColor: "#FF2A2A",
-                borderRadius: 1,
+                mt: 0.5, // Diminuído de 1
+                mb: 1.5, // Diminuído de 2
+                backgroundColor: "#FF3030",
+                borderRadius: 2,
                 boxShadow: "none",
-                padding: "6px 12px", // Tamanho reduzido para o botão
-                fontSize: "0.875rem", // Texto menor
+                padding: "8px", // Diminuído de 10px
+                fontSize: "15px", // Diminuído de 16px
+                fontWeight: "bold",
+                "&:hover": {
+                  backgroundColor: "#D81B1B",
+                }
               }}
               fullWidth
               type="submit"
@@ -193,19 +231,18 @@ function Cadastro() {
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
-                color: "white",
-                fontSize: "0.75rem", // Texto menor para o link
+                mt: 0.5,
               }}
             >
-              <Typography variant="body2" sx={{ color: "white", mr: 1, fontSize: "0.75rem" }}>
+              <Typography variant="body2" sx={{ color: "white", mr: 1 }}>
                 Já tem cadastro?
               </Typography>
               <Link
-                to="/"
+                to="/login"
                 style={{
-                  color: "#FF9696",
+                  color: "white",
                   textDecoration: "none",
-                  fontFamily: "Arial, sans-serif",
+                  fontWeight: "bold",
                 }}
               >
                 Login
@@ -213,19 +250,22 @@ function Cadastro() {
             </Box>
           </Box>
         </Box>
-      </Box>
+      </Container>
+      
+      {/* Footer - Agora fixo */}
       <Box
         sx={{
           backgroundColor: "#C91E1E",
           height: "50px",
           width: "100%",
-          position: "fixed",
-          bottom: 0,
-          left: 0,
-          zIndex: 1000,
+          position: "fixed", // Fixado na tela
+          bottom: 0, // Na parte inferior
+          left: 0, // Alinhado à esquerda
+          zIndex: 1000, // Garante que fique acima de outros elementos
         }}
       />
     </Box>
   );
 }
+
 export default Cadastro;
