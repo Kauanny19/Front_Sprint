@@ -4,16 +4,18 @@ import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import api from "../axios/axios";
 import senaiLogo from "../assets/senai_logo.png";
+import Header from "../components/Header";
+import Footer from "../components/Footer";
 
 function Login() {
   const [user, setUser] = useState({
     email: "",
     senha: "",
   });
-
+  const navigate = useNavigate();
   const onChange = (event) => {
     const { name, value } = event.target;
     setUser({ ...user, [name]: value });
@@ -28,6 +30,8 @@ function Login() {
     await api.postLogin(user).then(
       (response) => {
         alert(response.data.message);
+        localStorage.setItem('authenticated', true)
+        navigate("home/")
       },
       (error) => {
         console.log(error);
@@ -42,19 +46,10 @@ function Login() {
       backgroundColor: "#FFE9E9", 
       display: "flex", 
       flexDirection: "column",
+      
     }}>
-      <Box sx={{ 
-        backgroundColor: "#C91E1E",
-        height: "50px",
-        width: "100%",
-        position: "fixed",
-        top: 0,
-        left: 0,
-        zIndex: 1000,
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center"
-      }} />
+      
+      <Header/>
 
       <Box
         sx={{
@@ -66,8 +61,6 @@ function Login() {
           left: 0,
           right: 0,
           bottom: 0,
-          zIndex: 900,
-          pointerEvents: "none", // Permite clicar em elementos abaixo
         }}
       >
         <Box
@@ -78,24 +71,22 @@ function Login() {
             backgroundColor: "#AE0000",
             padding: 2.5,
             borderRadius: 2,
-            boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
+            height:"350px",
             width: "320px", // Tamanho fixo mais reduzido
             maxHeight: "80vh",
-            overflowY: "auto",
-            pointerEvents: "auto", // Permite interação com este elemento
           }}
         >
-          <Box sx={{ marginBottom: 1 }}>
+          <Box sx={{ mt: 2  }}>
             <img
               src={senaiLogo}
               alt="SENAI Logo"
-              style={{ height: "45px", borderRadius: 2 }}
+              style={{ height: "55px", borderRadius: 2 }}
             />
           </Box>
 
           <Box 
             component="form" 
-            sx={{ mt: 0.5, width: "100%" }} 
+            sx={{ mt: 3, width: "100%" }} 
             onSubmit={handleSubmit} 
             noValidate
           >
@@ -105,12 +96,10 @@ function Login() {
               id="email"
               placeholder="Email"
               name="email"
-              margin="dense"
-              size="small"
               value={user.email}
               onChange={onChange}
               sx={{
-                marginBottom: 1,
+                marginBottom: 3.5,
                 backgroundColor: "white",
                 borderRadius: 1,
               }}
@@ -121,13 +110,11 @@ function Login() {
               id="senha"
               placeholder="Senha"
               name="senha"
-              margin="dense"
-              size="small"
               type="password"
               value={user.senha}
               onChange={onChange}
               sx={{
-                marginBottom: 1,
+                marginBottom: 3,
                 backgroundColor: "white",
                 borderRadius: 1,
               }}
@@ -135,12 +122,12 @@ function Login() {
             <Button
               sx={{
                 mt: 0.5,
-                mb: 1.5,
+                mb: 2,
                 backgroundColor: "#FF2A2A",
                 borderRadius: 1,
                 boxShadow: "none",
-                padding: "6px 12px",
-                fontSize: "0.875rem",
+                padding: "7px 12px",
+                fontSize: "13px",
               }}
               fullWidth
               type="submit"
@@ -154,9 +141,9 @@ function Login() {
                 alignItems: "center", 
                 justifyContent: "center",
                 color: "white",
-                fontSize: "0.75rem",
+                fontSize: "13px",
               }}>
-              <Typography variant="body2" sx={{ color: "white", mr: 1, fontSize: "0.75rem" }}>
+              <Typography variant="body2" sx={{ color: "white", mr: 1, fontSize: "13px" }}>
                 Não tem cadastro?
               </Typography>
               <Link 
@@ -174,15 +161,7 @@ function Login() {
         </Box>
       </Box>
 
-      <Box sx={{ 
-          backgroundColor: "#C91E1E",
-          height: "50px",
-          width: "100%",
-          position: "fixed",
-          bottom: 0,
-          left: 0,
-          zIndex: 1000,
-        }} />
+      <Footer/>
     </Box>
   );
 }
