@@ -54,7 +54,7 @@ function listSalas() {
   return (
     <div
       style={{
-        height: "100vh",
+        height: "100%",
         backgroundColor: "#FFE9E9",
         display: "flex",
         flexDirection: "column",
@@ -63,9 +63,14 @@ function listSalas() {
       {salas.length === 0 ? (
         <h1>Carregando Salas...</h1>
       ) : (
+
         <div>
-          <h5>Lista Salas</h5>
-          <TableContainer component={Paper} style={{ margin: "2px" }}>
+            <Header title="HOME" />
+          <div style={{ display: "flex", justifyContent: "center" }}> {/* Container para centralizar a tabela */}
+          <TableContainer component={Paper} style={{ 
+                margin: "2px",
+                maxWidth: "80%" // Limita a largura da tabela para melhor aparência
+              }}>
             <Table size="small">
               <TableHead
                 style={{ backgroundColor: "brown", borderStyle: "solid" }}
@@ -79,6 +84,7 @@ function listSalas() {
               <TableBody>{listSalas}</TableBody>
             </Table>
           </TableContainer>
+          </div>
           <Button fullWidth variant="contained" onClick={logout}>
             SAIR
           </Button>
