@@ -15,6 +15,8 @@ import { useNavigate } from "react-router-dom";
 import Header from "../components/HeaderLogo";
 import Footer from "../components/Footer";
 import LogoSenai from "../assets/senai_logo.png"
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+
 
 function listSalas() {
   const [salas, setSalas] = useState([]);
@@ -70,6 +72,7 @@ function listSalas() {
         display: "flex",
         alignItems: "center"
       }}>
+        <AccountCircleIcon/>
         <span style={{ color: "white", fontWeight: "bold", fontSize: "18px" }}>
           HOME
         </span>
@@ -84,13 +87,7 @@ function listSalas() {
       ) : (
 
         <div>
-          <Container>
-          <Header>
-          <img src={LogoSenai} alt="Logo" />
-          </Header>
-          
-          </Container>
-            
+          <Header/> 
           <div style={{ display: "flex", justifyContent: "center" }}> {/* Container para centralizar a tabela */}
           <TableContainer component={Paper} style={{ 
                 margin: "2px",
