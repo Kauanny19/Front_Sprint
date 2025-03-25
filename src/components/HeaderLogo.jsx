@@ -1,6 +1,8 @@
 import * as React from "react";
 import Box from "@mui/material/Box";
-import LogoSenai from "../assets/senai_logo.png"
+import LogoSenai from "../assets/senai_logo.png";
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+
 
 function Header(){
     return(
@@ -18,7 +20,7 @@ function Header(){
             alignItems: "center",
             
           }}>
-           < img src={LogoSenai} alt="Logo SENAI" style={{ height: "40px", borderRadius: 3, alignContent:"end", margin:20 }}/>
+            <AccountCircleIcon style={{ fontSize: 45, alignContent:"end", margin:20, color: "white" }}/>
           </Box>
     )
 }
