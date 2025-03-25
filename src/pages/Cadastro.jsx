@@ -81,7 +81,7 @@ function Cadastro() {
             <img
               src={senaiLogo}
               alt="SENAI Logo"
-              style={{ height: "45px", borderRadius: 2 }} // Reduzido de 55px para 45px
+              style={{ height: "55px", borderRadius: 2 }} // Reduzido de 55px para 45px
             />
           </Box>
 

@@ -28,15 +28,7 @@ function listSalas() {
     );
   }
 
-  const listSalas = salas.map((sala) => {
-    return (
-      <TableRow key={sala.id_usuario}>
-        <TableCell align="center">{sala.numero}</TableCell>
-        <TableCell align="center">{sala.descricao}</TableCell>
-        <TableCell align="center">{sala.capacidade}</TableCell>
-      </TableRow>
-    );
-  });
+  
 
   function logout() {
     localStorage.removeItem("authenticated");
@@ -123,7 +115,15 @@ function listSalas() {
           ))
         )}
       </Grid>
+      <Button 
+      fullWidth
+      variant='contained'
+      onClick={logout}
+      style={{marginTop:10, marginBottom: 10, background:"#B92626" }}>
+        SAIR
+      </Button>
       </Container>
+      
       
       <Footer />
     </div>
