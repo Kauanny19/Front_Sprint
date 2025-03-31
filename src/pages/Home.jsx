@@ -49,7 +49,7 @@ function listSalas() {
           position: "fixed",
           marginTop: 5,
           right: 30,
-          zIndex: 1100,
+          zIndex: 1100, //Garante que fique acima do header
           display: "flex",
           alignItems: "center",
         }}

@@ -17,7 +17,10 @@ function App() {
               <Home/>
             </ProtectedRoute>
           }/>
-          <Route path="/sala" element={<Sala/>} />
+          <Route path="/sala" element={
+          <ProtectedRoute>
+            <Sala/>
+          </ProtectedRoute>} />
       </Routes>
     </Router>
   );
