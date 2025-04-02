@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import Paper from "@mui/material/Paper";
 import api from "../axios/axios";
-import { Button, Container, Typography, InputBase } from "@mui/material";
+import { Button, Container, Typography, InputBase, Box } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import HeaderLogo from "../components/HeaderLogo";
 import Footer from "../components/Footer";
@@ -34,7 +34,7 @@ function listSalas() {
   }, []);
 
   return (
-    <div
+    <Box
       style={{
         height: "100%",
         backgroundColor: "#FFE9E9",
@@ -44,17 +44,16 @@ function listSalas() {
         padding: 2,
       }}
     >
-      <div
+      <Box
         style={{
           position: "fixed",
-          marginTop: 5,
-          right: 30,
-          zIndex: 1100, //Garante que fique acima do header
+          right: 20,
+          zIndex: 1, //Garante que fique acima do header
           display: "flex",
           alignItems: "center",
         }}
       >
-        <span
+        <Typography
           style={{
             color: "white",
             fontWeight: "bold",
@@ -63,8 +62,8 @@ function listSalas() {
           }}
         >
           HOME
-        </span>
-      </div>
+        </Typography>
+      </Box>
       <Container sx={{ mt: 8, mb: 4}}>
         <HeaderLogo />
         <Paper
@@ -169,7 +168,7 @@ function listSalas() {
       </Container>
 
       <Footer />
-    </div>
+    </Box>
   );
 }
 
