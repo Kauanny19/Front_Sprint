@@ -5,13 +5,14 @@ import Cadastro from "./pages/Cadastro";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Home from "./pages/Home";
 import Sala from "./pages/Sala"
+import DefaultLayout from "./components/DefaultLayout";
 
 function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<Login />}/>
-        <Route path="/cadastro" element={<Cadastro/>} />
+        <Route path="/" element={<DefaultLayout headerRender={1}><Login/></DefaultLayout>}/>
+        <Route path="/cadastro" element={<DefaultLayout headerRender={1}><Cadastro/></DefaultLayout>} />
         <Route path="/home" element={
             <ProtectedRoute>
               <Home/>
