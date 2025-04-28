@@ -1,59 +1,65 @@
-import React from "react";
-import Typography from "@mui/material/Typography";
-import Box from "@mui/material/Box";
-import Header from "../components/HeaderLogo";
-import Footer from "../components/Footer";
+//  import React from "react";
+//  import Typography from "@mui/material/Typography";
+//  import Box from "@mui/material/Box";
+//  import Header from "../components/HeaderLogo";
+//  import Footer from "../components/Footer";
 
-function HorariosDisponiveis() {
-  const [horarios, setHorarios] = useState([]);
-  const [alert, setAlert] = useState({
-    open: false, 
-    severity: "", 
-    message: "" 
-  });
+//  function listHorarios() {
+//    const [data, setData] = useState([]);
+//    const [alert, setAlert] = useState({
+//      open: false, 
+//      severity: "", 
+//      message: "" 
+//    });
 
-  async function getHorarios(){
-    // Chamada da Api
-    await api.getHorarios().then(
-      (response)=>{
-        console.log(response.data.users)
-        setHorarios(response.data.users)
-      },(error)=>{
-        console.log("Erro ",error)
-      }
-    )
-  }
+//    async function viewReservaSala(){
+//      // Chamada da Api
+//      await api.viewReservaSala().then(
+//        (response)=>{
+//          console.log(response.data.users)
+//          setHorarios(response.data.users)
+//        },(error)=>{
+//          console.log("Erro ",error)
+//        }
+//      )
+//    }
+
+//    function logout() {
+//      localStorage.removeItem("authenticated");
+//      navigate("/");
+//    }
+  
+//    const [userToDelete, setUsertoDelete] = useState("");
+//    const [modalOpen, setModalOpen] = useState(false);
+
+//    //Função para exibir o alerta 
+//    const showAlert = (severity, message) => {
+//      setAlert({open: true, severity, message})
+//    };
+
+//    //fechar o alerta
+//    const handleCloseAlert = () => {
+//      setAlert({...alert, open:false})
+//    };
+
+//    const openDeleteModal = (id, name)=>{
+//      setUsertoDelete({id : id, name : name});
+//      setModalOpen(true);
+//    };
+
+//  }
+//  export default viewReservaSala;
+
+ 
+
+// import React from 'react';
+
+function Sala() {
+  return (
+    <div>
+      <h1>Página da Sala</h1>
+    </div>
+  );
 }
+
 export default Sala;
-
-
-// <ConfirmDelete
-//       open={modalOpen}
-//       userName={userToDelete.name}
-//       onConfirm={deleteUser}
-//       onClose={()=>setModalOpen(false)}
-//       />
-//       {users.length === 0 ?(<h1>Carregando usuários</h1>): (
-//       <div>
-//         <h5>Lista de usuários</h5>
-//         <TableContainer component={Paper} style={{margin:"2px"}}>
-//           <Table size="small">
-//             <TableHead style={{backgroundColor: "lightskyblue", borderStyle:"solid"}}>
-//               <TableRow>
-//                 <TableCell align="center">
-//                   Nome
-//                 </TableCell>
-//                 <TableCell align="center">
-//                   Email
-//                 </TableCell>
-//                 <TableCell align="center">
-//                   CPF
-//                 </TableCell>
-//                 <TableCell align="center">
-//                   Ações
-//                 </TableCell>
-//               </TableRow>
-//             </TableHead>
-//             <TableBody>{listUsers}</TableBody>
-//           </Table>
-//         </TableContainer>

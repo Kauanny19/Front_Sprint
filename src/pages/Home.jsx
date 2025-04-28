@@ -9,10 +9,10 @@ import Grid from '@mui/material/Grid';
 
 function listSalas() {
   const [salas, setSalas] = useState([]);
+  const [searchTerm, setSearchTerm] = useState(""); // Adicionado estado para pesquisa
   const navigate = useNavigate();
 
   async function getSalas() {
-    // Chamada da Api
     await api.getSalas().then(
       (response) => {
         console.log(response.data.salas);
@@ -48,7 +48,7 @@ function listSalas() {
         style={{
           position: "fixed",
           right: 20,
-          zIndex: 1, //Garante que fique acima do header
+          zIndex: 1,
           display: "flex",
           alignItems: "center",
         }}
@@ -64,8 +64,10 @@ function listSalas() {
           HOME
         </Typography>
       </Box>
-      <Container sx={{ mt: 8, mb: 4}}>
+      
+      <Container sx={{ mt: 8, mb: 4 }}>
         <HeaderLogo />
+        
         <Paper
           component="form"
           sx={{
@@ -81,82 +83,84 @@ function listSalas() {
             sx={{ ml: 2, flex: 1 }}
             placeholder="Pesquisar"
             inputProps={{ "aria-label": "search" }}
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
           />
         </Paper>
-        <Grid container spacing={7}>
 
+        <Grid container spacing={7}>
           {salas.length === 0 ? (
             <Typography xs={20} sx={{ textAlign: "center" }}>
               Carregando Salas...
             </Typography>
           ) : (
-            salas.map((sala) => (
-              <Grid item xs={12} sm={6} md={4} key={sala.id_usuario}>
-
-                <Paper
-                  sx={{
-                    height: 200,
-                    display: "flex",
-                    flexDirection: "column",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                    textAlign: "center",
-                    borderRadius: 2,
-                    backgroundColor: "white",
-                  }}
-                  onClick={() => navigate("/sala")}
-                  style={{ cursor: 'pointer' }} 
-                >
-                  {/* Nome da sala no topo do cartão */}
-                  <Typography
-                    variant="h5"
+            salas
+              .filter((sala) =>
+                sala.descricao.toLowerCase().includes(searchTerm.toLowerCase())
+              )
+              .map((sala) => (
+                <Grid item xs={12} sm={6} md={4} key={sala.id_usuario}>
+                  <Paper
                     sx={{
-                      fontWeight: "bold",
-                      color: "white",
-                      backgroundColor: "#D32F2F",
-                      padding: "10px",
-                      borderRadius: 1,
-                      width: "95%",
+                      height: 200,
+                      display: "flex",
+                      flexDirection: "column",
+                      justifyContent: "space-between",
+                      alignItems: "center",
                       textAlign: "center",
-                      marginBottom: "10px",
+                      borderRadius: 2,
+                      backgroundColor: "white",
                     }}
+                    onClick={() => navigate("/sala/${sala.id_sala}")} //PAREI AQUIII
+                    style={{ cursor: 'pointer' }} 
                   >
-                    {sala.descricao}
-                  </Typography>
-
-                  {/* Grid interno para organizar o conteúdo (número e capacidade) */}
-                  <Grid container sx={{ flexDirection: "column", gap: 1, width: "100%" }}>
-
-                    {/* Número da sala */}
                     <Typography
-                      variant="subtitle1"
-                      fontSize={20}
+                      variant="h5"
                       sx={{
-                        display: "flex",
-                        justifyContent: "flex-start",
-                        padding: "0 0 0 25px",
+                        fontWeight: "bold",
+                        color: "white",
+                        backgroundColor: "#D32F2F",
+                        padding: "10px",
+                        borderRadius: 1,
+                        width: "95%",
+                        textAlign: "center",
+                        marginBottom: "10px",
                       }}
                     >
-                      Sala {sala.numero}
+                      {sala.descricao}
                     </Typography>
 
-                    <Typography
-                      variant="body2"
-                      fontSize={14}
-                      sx={{
-                        display: "flex",
-                        justifyContent: "flex-start",
-                        padding: "0 0 18px 25px",
-                      }}
-                    >
-                      Máx. {sala.capacidade} pessoas
-                    </Typography>
-                  </Grid>
-                </Paper>
-              </Grid>
-            ))
+                    <Grid container sx={{ flexDirection: "column", gap: 1, width: "100%" }}>
+                      <Typography
+                        variant="subtitle1"
+                        fontSize={20}
+                        sx={{
+                          display: "flex",
+                          justifyContent: "flex-start",
+                          padding: "0 0 0 25px",
+                        }}
+                      >
+                        Sala {sala.numero}
+                      </Typography>
+
+                      <Typography
+                        variant="body2"
+                        fontSize={14}
+                        sx={{
+                          display: "flex",
+                          justifyContent: "flex-start",
+                          padding: "0 0 18px 25px",
+                        }}
+                      >
+                        Máx. {sala.capacidade} pessoas
+                      </Typography>
+                    </Grid>
+                  </Paper>
+                </Grid>
+              ))
           )}
         </Grid>
+
         <Button
           fullWidth
           variant="contained"

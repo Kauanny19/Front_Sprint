@@ -13,18 +13,13 @@ function App() {
       <Routes>
         <Route path="/" element={<DefaultLayout headerRender={1}><Login/></DefaultLayout>}/>
         <Route path="/cadastro" element={<DefaultLayout headerRender={1}><Cadastro/></DefaultLayout>} />
-        <Route path="/home" element={
-            <ProtectedRoute>
-              <Home/>
-            </ProtectedRoute>
-          }/>
-          <Route path="/sala" element={
-          <ProtectedRoute>
-            <Sala/>
-          </ProtectedRoute>} />
+        <Route path="/home" element={<ProtectedRoute><Home/></ProtectedRoute>}/>
+        <Route path="/sala/:id" element={<ProtectedRoute><Sala/></ProtectedRoute>} />
       </Routes>
     </Router>
   );
 }
 
 export default App;
+
+
