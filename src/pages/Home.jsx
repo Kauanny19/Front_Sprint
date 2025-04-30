@@ -111,7 +111,7 @@ function listSalas() {
                       borderRadius: 2,
                       backgroundColor: "white",
                     }}
-                    onClick={() => navigate("/sala/${sala.id_sala}")} //PAREI AQUIII
+                    onClick={() => navigate(`/sala/${sala.id_sala}`)}
                     style={{ cursor: 'pointer' }} 
                   >
                     <Typography
