@@ -30,11 +30,8 @@ function Login() {
     await api.postLogin(user).then(
       (response) => {
         alert(response.data.message);
-        if(response.data.auth === true){
-          localStorage.setItem('authenticated', true)
-          localStorage.setItem('token', response.data.token)
-          navigate("home/")
-        }
+        localStorage.setItem('authenticated', true)
+        navigate("home/")
         
       },
       (error) => {
