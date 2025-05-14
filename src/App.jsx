@@ -6,6 +6,7 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import Home from "./pages/Home";
 import Sala from "./pages/Sala"
 import DefaultLayout from "./components/DefaultLayout";
+import ShowReservas from "./pages/ShowReservas"
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
         <Route path="/home" element={<ProtectedRoute><Home/></ProtectedRoute>}/>
         <Route path="/sala" element={<ProtectedRoute><Sala/></ProtectedRoute>} />
         <Route path="/sala/:id" element={<ProtectedRoute><Sala/></ProtectedRoute>} />
+        <Route path="/showreservas" element={<ProtectedRoute><ShowReservas/></ProtectedRoute>}/>
       </Routes>
     </Router>
   );

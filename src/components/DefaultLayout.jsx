@@ -9,7 +9,7 @@ const DefaultLayout = ({children, headerRender}) => {
     <div>
       {headerRender === 1 ? (
         <Box
-          sx={{ display: "flex", flexDirection: "column", minHeight: "100px" }}
+          sx={{ display: "flex", flexDirection: "column", minHeight: "100px",  }}
         >
           <Header />
           <Box

@@ -47,7 +47,7 @@ function Sala() {
   }, [data]);
 
   return (
-    <div style={{ fontFamily: "Arial", padding: "16px", background: "#f9f9f9" }}>
+    <div style={{ fontFamily: "Arial", padding: "16px", background: "#f9f9f9", marginTop: "60px" }}>
       <div style={{ background: "#b22222", color: "white", padding: "12px", borderRadius: "4px" }}>
         <h1 style={{ margin: 0 }}>Reserva para Sala {id}</h1>
       </div>
@@ -123,48 +123,83 @@ function Sala() {
       )}
 
       <Modal
-        open={modalOpen}
-        onClose={() => setModalOpen(false)}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
-      >
-        <Box
+  open={modalOpen}
+  onClose={() => setModalOpen(false)}
+  aria-labelledby="modal-modal-title"
+  aria-describedby="modal-modal-description"
+>
+  <Box
+    sx={{
+      position: "absolute",
+      top: "50%",
+      left: "50%",
+      transform: "translate(-50%, -50%)",
+      width: 320,
+      bgcolor: "white",
+      borderRadius: "8px",
+      boxShadow: 24,
+      overflow: "hidden",
+    }}
+  >
+    {/* Título com fundo vermelho */}
+    <Box
+      sx={{
+        backgroundColor: "#b22222",
+        color: "white",
+        padding: "12px",
+        textAlign: "center",
+        fontWeight: "bold",
+        fontSize: "18px",
+      }}
+    >
+      RESERVAR
+    </Box>
+
+    {/* Corpo do modal */}
+    <Box sx={{ padding: "16px", textAlign: "center" }}>
+      <Typography variant="body1" sx={{ mb: 1 }}>
+        SALA: {`Sala ${id}`}
+      </Typography>
+      <Typography variant="body1" sx={{ mb: 1 }}>
+        DATA: {new Date(data).toLocaleDateString("pt-BR")}
+      </Typography>
+      <Typography variant="body1" sx={{ mb: 2 }}>
+        HORÁRIO: {horarioReserva?.inicio} - {horarioReserva?.fim}
+      </Typography>
+
+      {/* Botões */}
+      <Box sx={{ display: "flex", justifyContent: "center", gap: 2 }}>
+        <Button
+          variant="contained"
+          onClick={reservarHorario}
           sx={{
-            position: "absolute",
-            top: "50%",
-            left: "50%",
-            transform: "translate(-50%, -50%)",
-            width: 400,
-            bgcolor: "background.paper",
-            border: "2px solid #000",
-            boxShadow: 24,
-            p: 4,
+            backgroundColor: "#81c784",
+            color: "white",
+            "&:hover": {
+              backgroundColor: "#66bb6a",
+            },
           }}
         >
-          <Typography variant="h6" component="h2" id="modal-modal-title">
-            Confirmar Reserva
-          </Typography>
-          <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-            Você deseja reservar o horário {horarioReserva?.inicio} - {horarioReserva?.fim}?
-          </Typography>
-          <Button
-            variant="contained"
-            color="primary"
-            sx={{ mt: 2, mr: 2 }}
-            onClick={reservarHorario}
-          >
-            Confirmar
-          </Button>
-          <Button
-            variant="outlined"
-            color="secondary"
-            sx={{ mt: 2 }}
-            onClick={() => setModalOpen(false)}
-          >
-            Cancelar
-          </Button>
-        </Box>
-      </Modal>
+          CONFIRMAR
+        </Button>
+        <Button
+          variant="contained"
+          onClick={() => setModalOpen(false)}
+          sx={{
+            backgroundColor: "#ef9a9a",
+            color: "white",
+            "&:hover": {
+              backgroundColor: "#e57373",
+            },
+          }}
+        >
+          CANCELAR
+        </Button>
+      </Box>
+    </Box>
+  </Box>
+</Modal>
+
     </div>
   );
 }
