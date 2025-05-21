@@ -32,13 +32,17 @@ function Sala() {
     if (!horarioReserva) return;
 
     try {
-      await api.reservarHorario(id, horarioReserva);
+      await api.postReservarHorario(id, horarioReserva);
+      
+      localStorage.setItem('authenticated', true)
+      localStorage.setItem("token", response.data.token)
+
       alert("Reserva realizada com sucesso!");
       setModalOpen(false);
       getHorariosSala(data);
+
     } catch (error) {
-      console.log("Erro ao realizar a reserva:", error);
-      alert("Não foi possível realizar a reserva.");
+      alert("Não foi possível realizar a reserva.", error);
     }
   };
 

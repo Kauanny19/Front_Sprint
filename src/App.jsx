@@ -6,7 +6,8 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import Home from "./pages/Home";
 import Sala from "./pages/Sala"
 import DefaultLayout from "./components/DefaultLayout";
-import ShowReservas from "./pages/ShowReservas"
+import MinhasReservas from "./pages/ShowReservas"
+import Profile from "./pages/Profile"
 
 function App() {
   return (
@@ -17,7 +18,9 @@ function App() {
         <Route path="/home" element={<ProtectedRoute><Home/></ProtectedRoute>}/>
         <Route path="/sala" element={<ProtectedRoute><Sala/></ProtectedRoute>} />
         <Route path="/sala/:id" element={<ProtectedRoute><Sala/></ProtectedRoute>} />
-        <Route path="/showreservas" element={<ProtectedRoute><ShowReservas/></ProtectedRoute>}/>
+        <Route path="/minhasReservas" element={<ProtectedRoute><MinhasReservas/></ProtectedRoute>}/>
+        <Route path="/profile" element={<ProtectedRoute><Profile/></ProtectedRoute>}/>
+        
       </Routes>
     </Router>
   );

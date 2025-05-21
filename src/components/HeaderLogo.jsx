@@ -20,9 +20,9 @@ function Header() {
   // Define o nome e a rota de cada item
   const menuItems = [
     { label: "HOME", path: "/home" },
-    { label: "MINHAS RESERVAS", path: "/reservas" },
+    { label: "MINHAS RESERVAS", path: "/minhasReservas" },
     { label: "TODAS AS SALAS", path: "/home" },
-    { label: "MEU PERFIL", path: "/reservas" },
+    { label: "MEU PERFIL", path: "/profile" },
     
   ];
 
@@ -48,9 +48,7 @@ function Header() {
           <AccountCircleIcon fontSize="large" sx={{ color: "white" }} />
         </IconButton>
 
-        <Typography variant="h6" sx={{ color: "white", ml: 2 }}>
-          HOME
-        </Typography>
+        
       </Box>
 
       {/* DRAWER LATERAL */}
