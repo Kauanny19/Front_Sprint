@@ -1,164 +1,172 @@
-import React, { useEffect, useState } from "react";
-import {
-  Box,
-  Typography,
-  Card,
-  CardContent,
-  Button,
-  Modal,
-} from "@mui/material";
+import React, { useState, useEffect } from "react";
 import api from "../axios/axios";
+import { Box, Typography, Paper } from "@mui/material";
 
 function MinhasReservas() {
   const [reservas, setReservas] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [modalExcluir, setModalExcluir] = useState(false);
-  const [modalAtualizar, setModalAtualizar] = useState(false);
-  const [reservaSelecionada, setReservaSelecionada] = useState(null);
-
-  const fetchReservas = async () => {
-    try {
-      const response = await api.get("/reservas/minhas", {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      });
-      setReservas(response.data);
-    } catch (err) {
-      console.error("Erro ao buscar reservas:", err);
-    } finally {
-      setLoading(false);
-    }
-  };
+  const [error, setError] = useState(null);
 
   useEffect(() => {
+    const fetchReservas = async () => {
+      setLoading(true);
+      const id_usuario = localStorage.getItem("id_usuario");
+
+      if (!id_usuario) {
+        console.error("ID do usuário não encontrado no localStorage.");
+        setError("Erro: ID do usuário não encontrado. Faça login novamente.");
+        setLoading(false);
+        return;
+      }
+
+      try {
+        // Certifique-se de que o método 'getReservas' no seu 'api' espera o id_usuario como parâmetro
+        const response = await api.getReservas(id_usuario);
+        // Ajuste aqui caso a estrutura da sua API seja diferente (ex: response.data diretamente)
+        setReservas(response.data.reservas || []);
+      } catch (err) {
+        console.error("Erro ao buscar minhas reservas:", err);
+        setError("Não foi possível carregar suas reservas.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
     fetchReservas();
   }, []);
 
-  const handleExcluir = async () => {
-    try {
-      await api.delete(`/reservas/${reservaSelecionada.id}`, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
+  // Função para agrupar reservas por data
+  const groupReservationsByDate = (reservations) => {
+    const grouped = {};
+    reservations.forEach((reserva) => {
+      const date = new Date(reserva.data).toLocaleDateString("pt-BR", {
+        day: "2-digit",
+        month: "2-digit",
+        year: "numeric",
       });
-      alert("Reserva excluída com sucesso.");
-      setModalExcluir(false);
-      fetchReservas();
-    } catch (err) {
-      console.error("Erro ao excluir reserva:", err);
-      alert("Erro ao excluir reserva.");
-    }
+      if (!grouped[date]) {
+        grouped[date] = [];
+      }
+      grouped[date].push(reserva);
+    });
+    return grouped;
   };
 
-  const handleAtualizar = async () => {
-    try {
-      await api.put(`/reservas/${reservaSelecionada.id}`, reservaSelecionada, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      });
-      alert("Reserva atualizada.");
-      setModalAtualizar(false);
-      fetchReservas();
-    } catch (err) {
-      alert("Erro ao atualizar.");
-    }
-  };
+  const groupedReservations = groupReservationsByDate(reservas);
+  // Ordenar as datas para exibir cronologicamente
+  const sortedDates = Object.keys(groupedReservations).sort((a, b) => {
+    const [dayA, monthA, yearA] = a.split('/').map(Number);
+    const [dayB, monthB, yearB] = b.split('/').map(Number);
+    // Cria objetos Date para comparação correta
+    return new Date(yearA, monthA - 1, dayA) - new Date(yearB, monthB - 1, dayB);
+  });
 
   return (
-    <Box sx={{ mt: 10, px: 2 }}>
-      <Typography variant="h5" sx={{ mb: 2 }}>
-        Minhas Reservas
-      </Typography>
+    <Box
+      sx={{
+        fontFamily: "Arial",
+        padding: "16px",
+        background: "#f9f9f9",
+        marginTop: "60px",
+        minHeight: "calc(100vh - 120px)",
+      }}
+    >
+      <Box
+        sx={{
+          backgroundColor: "#b22222",
+          color: "white",
+          padding: "12px",
+          borderRadius: "4px",
+          mb: 3,
+        }}
+      >
+        <Typography variant="h5">Minhas Reservas</Typography>
+      </Box>
 
-      {loading ? (
-        <Typography>Carregando...</Typography>
-      ) : reservas.length === 0 ? (
-        <Typography>Você não possui reservas.</Typography>
-      ) : (
-        reservas.map((reserva) => (
-          <Card key={reserva.id} sx={{ mb: 2, backgroundColor: "#ffecec" }}>
-            <CardContent>
-              <Typography variant="h6">{reserva.sala}</Typography>
-              <Typography variant="body2">
-                {new Date(reserva.data).toLocaleDateString("pt-BR")} |{" "}
-                {reserva.inicio} - {reserva.fim}
-              </Typography>
-              <Box sx={{ mt: 1, display: "flex", gap: 1 }}>
-                <Button
-                  variant="contained"
-                  color="error"
-                  onClick={() => {
-                    setReservaSelecionada(reserva);
-                    setModalExcluir(true);
-                  }}
-                >
-                  Excluir
-                </Button>
-                <Button
-                  variant="contained"
-                  color="primary"
-                  onClick={() => {
-                    setReservaSelecionada(reserva);
-                    setModalAtualizar(true);
-                  }}
-                >
-                  Atualizar
-                </Button>
-              </Box>
-            </CardContent>
-          </Card>
-        ))
+      {loading && <Typography>Carregando suas reservas...</Typography>}
+      {error && <Typography color="error">{error}</Typography>}
+      {!loading && !error && reservas.length === 0 && (
+        <Typography>Você ainda não tem nenhuma reserva.</Typography>
       )}
 
-      {/* Modal de Exclusão */}
-      <Modal open={modalExcluir} onClose={() => setModalExcluir(false)}>
-        <Box sx={modalBoxStyle}>
-          <Typography variant="h6">Excluir Reserva</Typography>
-          <Typography sx={{ mt: 2 }}>
-            Deseja excluir a reserva de {reservaSelecionada?.sala} em{" "}
-            {new Date(reservaSelecionada?.data).toLocaleDateString("pt-BR")}?
-          </Typography>
-          <Box sx={{ mt: 3, display: "flex", justifyContent: "flex-end", gap: 2 }}>
-            <Button onClick={() => setModalExcluir(false)}>Cancelar</Button>
-            <Button onClick={handleExcluir} variant="contained" color="error">
-              Confirmar
-            </Button>
-          </Box>
-        </Box>
-      </Modal>
+      {!loading && !error && reservas.length > 0 && (
+        <Box>
+          {sortedDates.map((date) => (
+            <Box key={date} sx={{ marginBottom: "24px" }}>
+              <Box
+                sx={{
+                  backgroundColor: "#b22222",
+                  color: "white",
+                  padding: "8px",
+                  borderRadius: "4px",
+                  marginBottom: "12px",
+                }}
+              >
+                <Typography variant="subtitle1" sx={{ fontWeight: "bold" }}>
+                  {date}
+                </Typography>
+              </Box>
 
-      {/* Modal de Atualização */}
-      <Modal open={modalAtualizar} onClose={() => setModalAtualizar(false)}>
-        <Box sx={modalBoxStyle}>
-          <Typography variant="h6">Atualizar Reserva</Typography>
-          {/* Aqui você pode colocar inputs para alterar a hora, sala, etc. */}
-          <Typography sx={{ mt: 2 }}>
-            (Funcionalidade de alteração completa pode ser implementada aqui.)
-          </Typography>
-          <Box sx={{ mt: 3, display: "flex", justifyContent: "flex-end", gap: 2 }}>
-            <Button onClick={() => setModalAtualizar(false)}>Cancelar</Button>
-            <Button onClick={handleAtualizar} variant="contained" color="primary">
-              Confirmar
-            </Button>
-          </Box>
+              <Box
+                sx={{
+                  display: "flex",
+                  flexWrap: "wrap",
+                  gap: "16px",
+                }}
+              >
+                {groupedReservations[date].map((reserva) => (
+                  <Paper
+                    key={reserva.id_reserva}
+                    sx={{
+                      backgroundColor: "#D32F2F",
+                      color: "white",
+                      padding: "16px",
+                      borderRadius: "8px",
+                      minWidth: "250px",
+                      boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.1)",
+                      display: "flex",
+                      flexDirection: "column",
+                      gap: "8px",
+                    }}
+                  >
+                    <Typography
+                      variant="h6"
+                      sx={{
+                        fontWeight: "bold",
+                        textTransform: "uppercase",
+                      }}
+                    >
+                      {reserva.nome_disciplina ||
+                        reserva.tipo_reuniao ||
+                        "Reserva"}
+                    </Typography>
+                    <Typography variant="body1">
+                      Sala {reserva.numero_sala}
+                    </Typography>
+                    <Typography variant="body2">
+                      Máx. {reserva.capacidade_sala} pessoas
+                    </Typography>
+                    <Typography
+                      variant="body1"
+                      sx={{
+                        backgroundColor: "#8b0000",
+                        padding: "4px 8px",
+                        borderRadius: "4px",
+                        textAlign: "center",
+                        marginTop: "8px",
+                      }}
+                    >
+                      {reserva.hora_inicio} - {reserva.hora_fim}
+                    </Typography>
+                  </Paper>
+                ))}
+              </Box>
+            </Box>
+          ))}
         </Box>
-      </Modal>
+      )}
     </Box>
   );
 }
-
-const modalBoxStyle = {
-  position: "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  width: 340,
-  bgcolor: "background.paper",
-  boxShadow: 24,
-  p: 4,
-  borderRadius: 2,
-};
 
 export default MinhasReservas;

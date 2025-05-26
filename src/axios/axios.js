@@ -19,11 +19,13 @@ api.interceptors.request.use(
 
 const sheets = {
   postLogin: (user) => api.post("/user/login", user),
-  getUserByID: (id_usuario) => api.get(`/user/${id_usuario}`), // Corrigido: removido parâmetro desnecessário
+  getUserByID: (id_usuario) => api.get(`/user/${id_usuario}`),
   postCadastro: (user) => api.post("/user", user),
   postReservarHorario: (reserva) => api.post("/reserva", reserva),
-  getSalas: (sala) => api.get("/sala", sala),
+  getSalas: () => api.get("/sala"),
   getHorariosSala: (id_sala, data) => api.get(`/reserva/horarios/${id_sala}/${data}`),
+
+  getReservas: (id_usuario) => api.get(`/reserva/${id_usuario}`),
 };
 
 export default sheets;
