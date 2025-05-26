@@ -19,8 +19,7 @@ api.interceptors.request.use(
 
 const sheets = {
   postLogin: (user) => api.post("/user/login", user),
-  getUser: () => api.get("/user"), // Corrigido: removido parâmetro desnecessário
-  getUserData: () => api.get("/user/profile"), // Método específico se existir endpoint diferente
+  getUserByID: (id_usuario) => api.get(`/user/${id_usuario}`), // Corrigido: removido parâmetro desnecessário
   postCadastro: (user) => api.post("/user", user),
   postReservarHorario: (reserva) => api.post("/reserva", reserva),
   getSalas: (sala) => api.get("/sala", sala),

@@ -15,7 +15,7 @@ const MeuPerfil = () => {
 
     const getUserInfo = async () => {
       try {
-        const response = await api.getUsuario(id_usuario);
+        const response = await api.getUserByID(id_usuario);
         console.log("Dados do usuário retornados da API:", response.data);
         setUserData(response.data.user);
       } catch (error) {

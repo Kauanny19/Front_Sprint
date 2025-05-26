@@ -7,7 +7,7 @@ import HeaderLogo from "../components/HeaderLogo";
 import Footer from "../components/Footer";
 import Grid from '@mui/material/Grid';
 
-function listSalas() {
+function ListSalas() {
   const [salas, setSalas] = useState([]);
   const [searchTerm, setSearchTerm] = useState(""); // Adicionado estado para pesquisa
   const navigate = useNavigate();
@@ -176,4 +176,4 @@ function listSalas() {
   );
 }
 
-export default listSalas;
+export default ListSalas;
