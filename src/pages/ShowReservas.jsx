@@ -20,9 +20,7 @@ function MinhasReservas() {
       }
 
       try {
-        // Certifique-se de que o método 'getReservas' no seu 'api' espera o id_usuario como parâmetro
         const response = await api.getReservas(id_usuario);
-        // Ajuste aqui caso a estrutura da sua API seja diferente (ex: response.data diretamente)
         setReservas(response.data.reservas || []);
       } catch (err) {
         console.error("Erro ao buscar minhas reservas:", err);
@@ -35,7 +33,6 @@ function MinhasReservas() {
     fetchReservas();
   }, []);
 
-  // Função para agrupar reservas por data
   const groupReservationsByDate = (reservations) => {
     const grouped = {};
     reservations.forEach((reserva) => {
@@ -53,11 +50,10 @@ function MinhasReservas() {
   };
 
   const groupedReservations = groupReservationsByDate(reservas);
-  // Ordenar as datas para exibir cronologicamente
+
   const sortedDates = Object.keys(groupedReservations).sort((a, b) => {
-    const [dayA, monthA, yearA] = a.split('/').map(Number);
-    const [dayB, monthB, yearB] = b.split('/').map(Number);
-    // Cria objetos Date para comparação correta
+    const [dayA, monthA, yearA] = a.split("/").map(Number);
+    const [dayB, monthB, yearB] = b.split("/").map(Number);
     return new Date(yearA, monthA - 1, dayA) - new Date(yearB, monthB - 1, dayB);
   });
 
@@ -122,41 +118,21 @@ function MinhasReservas() {
                       color: "white",
                       padding: "16px",
                       borderRadius: "8px",
-                      minWidth: "250px",
-                      boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.1)",
-                      display: "flex",
-                      flexDirection: "column",
-                      gap: "8px",
+                      minWidth: "280px",
+                      boxShadow: "0px 4px 8px rgba(0,0,0,0.2)",
                     }}
                   >
-                    <Typography
-                      variant="h6"
-                      sx={{
-                        fontWeight: "bold",
-                        textTransform: "uppercase",
-                      }}
-                    >
-                      {reserva.nome_disciplina ||
-                        reserva.tipo_reuniao ||
-                        "Reserva"}
+                    <Typography variant="subtitle1" sx={{ fontWeight: "bold", mb: 1 }}>
+                      {reserva.horario_inicio} - {reserva.horario_fim}
                     </Typography>
-                    <Typography variant="body1">
-                      Sala {reserva.numero_sala}
+                    <Typography variant="body1" sx={{ mb: 0.5 }}>
+                      <strong>Descrição:</strong> {reserva.descricao_sala || "N/A"}
                     </Typography>
                     <Typography variant="body2">
-                      Máx. {reserva.capacidade_sala} pessoas
+                      <strong>Número:</strong> {reserva.numero_sala || "N/A"}
                     </Typography>
-                    <Typography
-                      variant="body1"
-                      sx={{
-                        backgroundColor: "#8b0000",
-                        padding: "4px 8px",
-                        borderRadius: "4px",
-                        textAlign: "center",
-                        marginTop: "8px",
-                      }}
-                    >
-                      {reserva.hora_inicio} - {reserva.hora_fim}
+                    <Typography variant="body2">
+                      <strong>Capacidade:</strong> {reserva.capacidade_sala || "N/A"} pessoas
                     </Typography>
                   </Paper>
                 ))}
