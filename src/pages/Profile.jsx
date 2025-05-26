@@ -1,39 +1,34 @@
-import * as React from "react";
-import { useState, useEffect } from "react";
-import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
-import TextField from "@mui/material/TextField";
-import Button from "@mui/material/Button";
+import React, { useState, useEffect } from "react";
+import { Box, Typography, TextField, Button } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import api from "../axios/axios";
 import DefaultLayout from "../components/DefaultLayout";
 
-function MeuPerfil() {
-  const [userData, setUserData] = useState({
-    nome: "",
-    cpf: "",
-    senha: "",
-    email: ""
-  });
-  
+const MeuPerfil = () => {
+  const [userData, setUserData] = useState({});
   const navigate = useNavigate();
 
-  // Função para buscar os dados do usuário do backend
   useEffect(() => {
-    const fetchUserData = async () => {
+    const id_usuario = localStorage.getItem("id_usuario");
+
+    if (!id_usuario) return;
+
+    const getUserInfo = async () => {
       try {
-        // Supondo que você tenha um endpoint para obter os dados do usuário logado
-        const response = await api.getUserData();
-        setUserData(response.data);
+        const response = await api.getUsuario(id_usuario);
+        console.log("Dados do usuário retornados da API:", response.data);
+        setUserData(response.data.user);
       } catch (error) {
-        console.error("Erro ao buscar dados do usuário:", error);
+        console.log("Erro ao buscar usuário:", error);
+        if (error.response?.data) {
+          console.log("Detalhes do erro:", error.response.data);
+        }
       }
     };
 
-    fetchUserData();
+    getUserInfo();
   }, []);
 
-  // Função para ir para a página de reservas
   const handleMinhasReservas = () => {
     navigate("/minhasReservas");
   };
@@ -46,8 +41,8 @@ function MeuPerfil() {
           backgroundColor: "#FFE9E9",
           display: "flex",
           flexDirection: "column",
-          paddingTop: "60px", // Espaço para o header
-          paddingBottom: "60px" // Espaço para o footer
+          paddingTop: "60px",
+          paddingBottom: "60px"
         }}
       >
         <Box
@@ -71,7 +66,6 @@ function MeuPerfil() {
               alignItems: "center"
             }}
           >
-            {/* Ícone do perfil */}
             <Box
               sx={{
                 backgroundColor: "#B9181D",
@@ -103,7 +97,6 @@ function MeuPerfil() {
               </svg>
             </Box>
 
-            {/* Nome */}
             <Typography
               variant="h6"
               component="div"
@@ -117,93 +110,46 @@ function MeuPerfil() {
               {userData.nome || "NOME DO USUÁRIO"}
             </Typography>
 
-            {/* Campos de dados */}
+            {/* CPF */}
             <Box sx={{ width: "100%", marginBottom: 1 }}>
-              <Typography
-                variant="body1"
-                sx={{
-                  color: "white",
-                  marginBottom: 0.5,
-                  marginRight: "auto",
-                  fontWeight: "bold"
-                }}
-              >
+              <Typography variant="body1" sx={labelStyle}>
                 CPF
               </Typography>
               <TextField
                 fullWidth
-                value={userData.cpf}
+                value={userData.cpf || ""}
                 disabled
-                sx={{
-                  marginBottom: 2,
-                  backgroundColor: "white",
-                  borderRadius: 1,
-                  "& .MuiInputBase-input.Mui-disabled": {
-                    WebkitTextFillColor: "#333",
-                    fontWeight: "medium"
-                  }
-                }}
+                sx={textFieldStyle}
               />
             </Box>
 
+            {/* Senha */}
             <Box sx={{ width: "100%", marginBottom: 1 }}>
-              <Typography
-                variant="body1"
-                sx={{
-                  color: "white",
-                  marginBottom: 0.5,
-                  marginRight: "auto",
-                  fontWeight: "bold"
-                }}
-              >
+              <Typography variant="body1" sx={labelStyle}>
                 SENHA
               </Typography>
               <TextField
                 fullWidth
                 type="password"
-                value={userData.senha}
+                value={userData.senha || ""}
                 disabled
-                sx={{
-                  marginBottom: 2,
-                  backgroundColor: "white",
-                  borderRadius: 1,
-                  "& .MuiInputBase-input.Mui-disabled": {
-                    WebkitTextFillColor: "#333",
-                    fontWeight: "medium"
-                  }
-                }}
+                sx={textFieldStyle}
               />
             </Box>
 
+            {/* Email */}
             <Box sx={{ width: "100%", marginBottom: 2 }}>
-              <Typography
-                variant="body1"
-                sx={{
-                  color: "white",
-                  marginBottom: 0.5,
-                  marginRight: "auto",
-                  fontWeight: "bold"
-                }}
-              >
+              <Typography variant="body1" sx={labelStyle}>
                 Email
               </Typography>
               <TextField
                 fullWidth
-                value={userData.email}
+                value={userData.email || ""}
                 disabled
-                sx={{
-                  marginBottom: 2,
-                  backgroundColor: "white",
-                  borderRadius: 1,
-                  "& .MuiInputBase-input.Mui-disabled": {
-                    WebkitTextFillColor: "#333",
-                    fontWeight: "medium"
-                  }
-                }}
+                sx={textFieldStyle}
               />
             </Box>
 
-            {/* Botão Minhas Reservas */}
             <Button
               variant="contained"
               onClick={handleMinhasReservas}
@@ -226,6 +172,23 @@ function MeuPerfil() {
       </Box>
     </DefaultLayout>
   );
-}
+};
 
 export default MeuPerfil;
+
+const labelStyle = {
+  color: "white",
+  marginBottom: 0.5,
+  marginRight: "auto",
+  fontWeight: "bold"
+};
+
+const textFieldStyle = {
+  marginBottom: 2,
+  backgroundColor: "white",
+  borderRadius: 1,
+  "& .MuiInputBase-input.Mui-disabled": {
+    WebkitTextFillColor: "#333",
+    fontWeight: "medium"
+  }
+};

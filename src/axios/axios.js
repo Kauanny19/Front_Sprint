@@ -8,8 +8,7 @@ const api = axios.create({
 api.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem("token");
-    console.log("token");
-    console.log(token);
+    console.log("token", token);
     if (token) {
       config.headers.Authorization = `${token}`;
     }
@@ -20,6 +19,8 @@ api.interceptors.request.use(
 
 const sheets = {
   postLogin: (user) => api.post("/user/login", user),
+  getUser: () => api.get("/user"), // Corrigido: removido parâmetro desnecessário
+  getUserData: () => api.get("/user/profile"), // Método específico se existir endpoint diferente
   postCadastro: (user) => api.post("/user", user),
   postReservarHorario: (reserva) => api.post("/reserva", reserva),
   getSalas: (sala) => api.get("/sala", sala),
