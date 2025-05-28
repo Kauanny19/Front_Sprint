@@ -13,17 +13,23 @@ function Sala() {
   const [horarioReserva, setHorarioReserva] = useState(null);
   const id_usuario = localStorage.getItem("id_usuario");
 
-  const getHorariosSala = async (data) => {
-    console.log("get horarios..........");
+  const getHorariosSalaReservada = async (data) => {
+    console.log("get horarios reservados..........");
     if (!data) return;
 
     setCarregando(true);
     setErro(null);
     try {
-      const response = await api.getHorariosSala(id, data);
-      console.log("reponse da data: ", response.data.horarios.Disponiveis);
-      setHorarios(response.data.horarios.Disponiveis);
-      
+      const response = await api.getHorariosSalaReservada(id, data);
+      const horariosIndisponiveis = response.data.horarios.Indisponiveis;
+
+      // Adiciona a flag 'reservado' aos horários
+      const horariosMarcados = horariosIndisponiveis.map((h) => ({
+        ...h,
+        reservado: true,
+      }));
+
+      setHorarios(horariosMarcados);
     } catch (error) {
       console.log("Erro ao buscar horários:", error);
       setErro("Não foi possível carregar os horários.");
@@ -36,28 +42,28 @@ function Sala() {
     if (!horarioReserva) return;
 
     try {
-      console.log("valorers para api: ", id, data, horarioReserva);
+      console.log("valores para api: ", id, data, horarioReserva);
 
       const response = await api.postReservarHorario({
         id_usuario: id_usuario,
         fk_id_sala: id,
-        data: data, // Adiciona a data à requisição de reserva
+        data: data,
         horarioInicio: horarioReserva.inicio,
-        horarioFim: horarioReserva.fim // Passa o objeto completo do horário, se a API espera assim
+        horarioFim: horarioReserva.fim
       });
-      
+
       alert("Reserva realizada com sucesso!");
       setModalOpen(false);
-      getHorariosSala(data); 
+      getHorariosSalaReservada(data);
 
     } catch (error) {
-      console.log("Erro ao realizar a reserva:", error.response.data.error);
-      alert(error.response.data.error);
+      console.log("Erro ao realizar a reserva:", error.response?.data?.error || error.message);
+      alert(error.response?.data?.error || "Erro ao realizar a reserva.");
     }
   };
 
   useEffect(() => {
-    if (data) getHorariosSala(data);
+    if (data) getHorariosSalaReservada(data);
   }, [data]);
 
   return (
@@ -67,7 +73,7 @@ function Sala() {
       </div>
 
       <div style={{ marginTop: "16px" }}>
-        <label><strong>Escolha a data:</strong></label>
+        <label><strong> Escolha a data: </strong></label>
         <input
           type="date"
           value={data}
@@ -84,7 +90,7 @@ function Sala() {
         ) : horarios.length > 0 ? (
           <div style={{ display: "flex", flexWrap: "wrap", gap: "12px" }}>
             {horarios.map((h, index) => {
-              const reservado = h.reservado; 
+              const reservado = h.reservado;
               const selecionado = horarioReserva?.inicio === h.inicio && horarioReserva?.fim === h.fim;
 
               return (
