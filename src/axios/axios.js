@@ -25,6 +25,8 @@ const sheets = {
   
   getSalas: () => api.get("/sala"),
   getHorariosSala: (id_sala, data) => api.get(`/reserva/horarios/${id_sala}/${data}`),
+  getHorariosSalaReservada: (id_sala, data) => api.get(`/reserva/horarios/${id_sala}/${data}`),
+
 
   getReservas: (id_usuario) => api.get(`/reserva/usuario${id_usuario}`),
 };

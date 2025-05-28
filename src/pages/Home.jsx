@@ -12,6 +12,11 @@ function ListSalas() {
   const [searchTerm, setSearchTerm] = useState(""); // Adicionado estado para pesquisa
   const navigate = useNavigate();
 
+ const handleSalaSelect = (sala) => {
+  navigate(`/sala/${sala.id_sala}`);
+}
+
+
   async function getSalas() {
     await api.getSalas().then(
       (response) => {
@@ -111,7 +116,7 @@ function ListSalas() {
                       borderRadius: 2,
                       backgroundColor: "white",
                     }}
-                    onClick={() => navigate(`/sala/${sala.id_sala}`)}
+                    onClick={() => handleSalaSelect(sala)}
                     style={{ cursor: 'pointer' }} 
                   >
                     <Typography

@@ -11,6 +11,7 @@ function Sala() {
   const [erro, setErro] = useState(null);
   const [modalOpen, setModalOpen] = useState(false);
   const [horarioReserva, setHorarioReserva] = useState(null);
+  const id_usuario = localStorage.getItem("id_usuario");
 
   const getHorariosSala = async (data) => {
     console.log("get horarios..........");
@@ -20,8 +21,8 @@ function Sala() {
     setErro(null);
     try {
       const response = await api.getHorariosSala(id, data);
-      console.log("reponse da data: ", response.data.horarios.horariosDisponiveis);
-      setHorarios(response.data.horarios.horariosDisponiveis);
+      console.log("reponse da data: ", response.data.horarios.Disponiveis);
+      setHorarios(response.data.horarios.Disponiveis);
       
     } catch (error) {
       console.log("Erro ao buscar horários:", error);
@@ -36,20 +37,21 @@ function Sala() {
 
     try {
       console.log("valorers para api: ", id, data, horarioReserva);
+
       const response = await api.postReservarHorario({
-        
-        sala: id,
+        id_usuario: id_usuario,
+        fk_id_sala: id,
         data: data, // Adiciona a data à requisição de reserva
-        horario: horarioReserva // Passa o objeto completo do horário, se a API espera assim
+        horarioInicio: horarioReserva.inicio,
+        horarioFim: horarioReserva.fim // Passa o objeto completo do horário, se a API espera assim
       });
       
       alert("Reserva realizada com sucesso!");
       setModalOpen(false);
-      // Recarrega os horários para refletir a reserva
       getHorariosSala(data); 
 
     } catch (error) {
-      console.log("Erro ao realizar a reserva:", error.response.data.error); // Melhor para depuração
+      console.log("Erro ao realizar a reserva:", error.response.data.error);
       alert(error.response.data.error);
     }
   };
@@ -61,7 +63,7 @@ function Sala() {
   return (
     <div style={{ fontFamily: "Arial", padding: "16px", background: "#f9f9f9", marginTop: "60px" }}>
       <div style={{ background: "#b22222", color: "white", padding: "12px", borderRadius: "4px" }}>
-        <h1 style={{ margin: 0 }}>Reserva para Sala {id}</h1>
+        <h1 style={{ margin: 0 }}> Reserva para Sala {id}</h1>
       </div>
 
       <div style={{ marginTop: "16px" }}>
