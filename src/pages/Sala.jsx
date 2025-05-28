@@ -13,13 +13,16 @@ function Sala() {
   const [horarioReserva, setHorarioReserva] = useState(null);
 
   const getHorariosSala = async (data) => {
+    console.log("get horarios..........");
     if (!data) return;
 
     setCarregando(true);
     setErro(null);
     try {
       const response = await api.getHorariosSala(id, data);
-      setHorarios(response.data.horariosDisponiveis);
+      console.log("reponse da data: ", response.data.horarios.horariosDisponiveis);
+      setHorarios(response.data.horarios.horariosDisponiveis);
+      
     } catch (error) {
       console.log("Erro ao buscar horários:", error);
       setErro("Não foi possível carregar os horários.");
@@ -32,10 +35,10 @@ function Sala() {
     if (!horarioReserva) return;
 
     try {
-      // ✅ Removido: localStorage.setItem("token", response.data.token)
-      // Uma requisição de reserva normalmente não retorna um token de autenticação.
-      // A autenticação deve ser feita no login e o token persistido.
-      await api.postReservarHorario(id, {
+      console.log("valorers para api: ", id, data, horarioReserva);
+      const response = await api.postReservarHorario({
+        
+        sala: id,
         data: data, // Adiciona a data à requisição de reserva
         horario: horarioReserva // Passa o objeto completo do horário, se a API espera assim
       });
@@ -46,8 +49,8 @@ function Sala() {
       getHorariosSala(data); 
 
     } catch (error) {
-      console.error("Erro ao realizar a reserva:", error); // Melhor para depuração
-      alert("Não foi possível realizar a reserva. Verifique o console para mais detalhes.");
+      console.log("Erro ao realizar a reserva:", error.response.data.error); // Melhor para depuração
+      alert(error.response.data.error);
     }
   };
 
