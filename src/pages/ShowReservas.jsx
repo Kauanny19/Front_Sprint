@@ -62,7 +62,7 @@ function MinhasReservas() {
       sx={{
         fontFamily: "Arial",
         padding: "16px",
-        background: "#f9f9f9",
+        background: "#f5f5f5",
         marginTop: "60px",
         minHeight: "calc(100vh - 120px)",
       }}
@@ -91,15 +91,14 @@ function MinhasReservas() {
             <Box key={date} sx={{ marginBottom: "24px" }}>
               <Box
                 sx={{
-                  backgroundColor: "#b22222",
-                  color: "white",
+                  backgroundColor: "#ffcccc",
                   padding: "8px",
                   borderRadius: "4px",
                   marginBottom: "12px",
                 }}
               >
-                <Typography variant="subtitle1" sx={{ fontWeight: "bold" }}>
-                  {date}
+                <Typography variant="h6" sx={{ fontWeight: "bold" }}>
+                  {date.replace(/\//g, " - ")}
                 </Typography>
               </Box>
 
@@ -114,26 +113,52 @@ function MinhasReservas() {
                   <Paper
                     key={reserva.id_reserva}
                     sx={{
-                      backgroundColor: "#D32F2F",
-                      color: "white",
-                      padding: "16px",
                       borderRadius: "8px",
-                      minWidth: "280px",
-                      boxShadow: "0px 4px 8px rgba(0,0,0,0.2)",
+                      minWidth: "180px",
+                      overflow: "hidden",
+                      border: "1px solid #D32F2F",
+                      display: "flex",
+                      flexDirection: "column",
                     }}
                   >
-                    <Typography variant="subtitle1" sx={{ fontWeight: "bold", mb: 1 }}>
-                      {reserva.horario_inicio} - {reserva.horario_fim}
-                    </Typography>
-                    <Typography variant="body1" sx={{ mb: 0.5 }}>
-                      <strong>Descrição:</strong> {reserva.descricao_sala || "N/A"}
-                    </Typography>
-                    <Typography variant="body2">
-                      <strong>Número:</strong> {reserva.numero_sala || "N/A"}
-                    </Typography>
-                    <Typography variant="body2">
-                      <strong>Capacidade:</strong> {reserva.capacidade_sala || "N/A"} pessoas
-                    </Typography>
+                    <Box
+                      sx={{
+                        backgroundColor: "#b22222",
+                        color: "white",
+                        padding: "8px",
+                        fontWeight: "bold",
+                        fontSize: "16px",
+                      }}
+                    >
+                      {reserva.nome_disciplina || "Disciplina"}
+                    </Box>
+
+                    <Box
+                      sx={{
+                        backgroundColor: "#f1f1ff",
+                        padding: "12px",
+                        flexGrow: 1,
+                      }}
+                    >
+                      <Typography variant="body1" sx={{ mb: 1 }}>
+                        <strong>Sala:</strong> {reserva.numero_sala || "N/A"}
+                      </Typography>
+                      <Typography variant="body1">
+                        <strong>Máx.:</strong> {reserva.capacidade_sala || "N/A"}
+                      </Typography>
+                    </Box>
+
+                    <Box
+                      sx={{
+                        padding: "8px",
+                        textAlign: "center",
+                        backgroundColor: "#fff",
+                        borderTop: "1px solid #ccc",
+                        fontWeight: "bold",
+                      }}
+                    >
+                      {reserva.horarioInicio} - {reserva.horarioFim}
+                    </Box>
                   </Paper>
                 ))}
               </Box>

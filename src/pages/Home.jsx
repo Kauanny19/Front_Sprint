@@ -16,7 +16,6 @@ function ListSalas() {
   navigate(`/sala/${sala.id_sala}`);
 }
 
-
   async function getSalas() {
     await api.getSalas().then(
       (response) => {

@@ -14,22 +14,26 @@ function Sala() {
   const id_usuario = localStorage.getItem("id_usuario");
 
   const getHorariosSalaReservada = async (data) => {
-    console.log("get horarios reservados..........");
     if (!data) return;
 
     setCarregando(true);
     setErro(null);
     try {
       const response = await api.getHorariosSalaReservada(id, data);
-      const horariosIndisponiveis = response.data.horarios.Indisponiveis;
+      const horariosDisponiveis = response.data.horarios.Disponiveis || [];
+      const horariosIndisponiveis = response.data.horarios.Indisponiveis || [];
 
-      // Adiciona a flag 'reservado' aos horários
-      const horariosMarcados = horariosIndisponiveis.map((h) => ({
+      const disponiveisMarcados = horariosDisponiveis.map((h) => ({
+        ...h,
+        reservado: false,
+      }));
+
+      const indisponiveisMarcados = horariosIndisponiveis.map((h) => ({
         ...h,
         reservado: true,
       }));
 
-      setHorarios(horariosMarcados);
+      setHorarios([...disponiveisMarcados, ...indisponiveisMarcados]);
     } catch (error) {
       console.log("Erro ao buscar horários:", error);
       setErro("Não foi possível carregar os horários.");
@@ -42,20 +46,18 @@ function Sala() {
     if (!horarioReserva) return;
 
     try {
-      console.log("valores para api: ", id, data, horarioReserva);
-
       const response = await api.postReservarHorario({
         id_usuario: id_usuario,
         fk_id_sala: id,
         data: data,
         horarioInicio: horarioReserva.inicio,
-        horarioFim: horarioReserva.fim
+        horarioFim: horarioReserva.fim,
       });
 
       alert("Reserva realizada com sucesso!");
       setModalOpen(false);
+      setHorarioReserva(null);
       getHorariosSalaReservada(data);
-
     } catch (error) {
       console.log("Erro ao realizar a reserva:", error.response?.data?.error || error.message);
       alert(error.response?.data?.error || "Erro ao realizar a reserva.");
@@ -88,36 +90,57 @@ function Sala() {
         ) : erro ? (
           <p>{erro}</p>
         ) : horarios.length > 0 ? (
-          <div style={{ display: "flex", flexWrap: "wrap", gap: "12px" }}>
-            {horarios.map((h, index) => {
-              const reservado = h.reservado;
-              const selecionado = horarioReserva?.inicio === h.inicio && horarioReserva?.fim === h.fim;
+          <>
+            {/* Horários Disponíveis */}
+            <Typography variant="h6" sx={{ mb: 1 }}>
+              Horários Disponíveis
+            </Typography>
+            <div style={{ display: "flex", flexWrap: "wrap", gap: "12px", marginBottom: "24px" }}>
+              {horarios.filter(h => !h.reservado).map((h, index) => {
+                const selecionado = horarioReserva?.inicio === h.inicio && horarioReserva?.fim === h.fim;
+                return (
+                  <Button
+                    key={`disp-${index}`}
+                    variant="outlined"
+                    onClick={() => setHorarioReserva(h)}
+                    sx={{
+                      minWidth: "100px",
+                      border: selecionado ? "2px solid #b22222" : "1px solid gray",
+                      backgroundColor: "#a5d6a7",
+                      color: "black",
+                      "&:hover": {
+                        backgroundColor: "#81c784",
+                      },
+                    }}
+                  >
+                    {h.inicio} - {h.fim}
+                  </Button>
+                );
+              })}
+            </div>
 
-              return (
+            {/* Horários Já Reservados */}
+            <Typography variant="h6" sx={{ mb: 1 }}>
+              Horários Já Reservados
+            </Typography>
+            <div style={{ display: "flex", flexWrap: "wrap", gap: "12px" }}>
+              {horarios.filter(h => h.reservado).map((h, index) => (
                 <Button
-                  key={index}
-                  variant="outlined"
-                  onClick={() => {
-                    if (!reservado) {
-                      setHorarioReserva(h);
-                    }
-                  }}
+                  key={`indisp-${index}`}
+                  variant="contained"
+                  disabled
                   sx={{
                     minWidth: "100px",
-                    border: selecionado ? "2px solid #b22222" : "1px solid gray",
-                    backgroundColor: reservado ? "#f44336" : "#a5d6a7",
-                    color: reservado ? "white" : "black",
-                    "&:hover": {
-                      backgroundColor: reservado ? "#f44336" : "#81c784",
-                    },
+                    backgroundColor: "#f44336",
+                    color: "white",
+                    opacity: 0.9,
                   }}
-                  disabled={reservado}
                 >
                   {h.inicio} - {h.fim}
                 </Button>
-              );
-            })}
-          </div>
+              ))}
+            </div>
+          </>
         ) : data ? (
           <p>Nenhum horário disponível para esta data.</p>
         ) : (

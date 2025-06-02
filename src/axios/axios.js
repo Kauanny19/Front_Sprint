@@ -8,7 +8,6 @@ const api = axios.create({
 api.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem("token");
-    console.log("token", token);
     if (token) {
       config.headers.Authorization = `${token}`;
     }
@@ -22,13 +21,12 @@ const sheets = {
   getUserByID: (id_usuario) => api.get(`/user/${id_usuario}`),
   postCadastro: (user) => api.post("/user", user),
   postReservarHorario: (reserva) => api.post("/reserva", reserva),
-  
   getSalas: () => api.get("/sala"),
   getHorariosSala: (id_sala, data) => api.get(`/reserva/horarios/${id_sala}/${data}`),
   getHorariosSalaReservada: (id_sala, data) => api.get(`/reserva/horarios/${id_sala}/${data}`),
-
-
-  getReservas: (id_usuario) => api.get(`/reserva/usuario${id_usuario}`),
+  
+  // Atualizado para usar a rota correta com a procedure
+  getReservas: (id_usuario) => api.get(`/reserva/usuario/${id_usuario}`),
 };
 
 export default sheets;
