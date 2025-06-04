@@ -19,7 +19,6 @@ api.interceptors.request.use(
 
 const sheets = {
   postLogin: (user) => api.post("/user/login", user),
-
   updateUser: (data) => api.put(`/user/`, data),
   getUserByID: (id_usuario) => api.get(`/user/${id_usuario}`),
   postCadastro: (user) => api.post("/user", user),
@@ -28,6 +27,7 @@ const sheets = {
   getHorariosSala: (id_sala, data) => api.get(`/reserva/horarios/${id_sala}/${data}`),
   getHorariosSalaReservada: (id_sala, data) => api.get(`/reserva/horarios/${id_sala}/${data}`),
   getReservas: (id_usuario) => api.get(`/reserva/usuario/${id_usuario}`),
+  deleteReservas: (id_reserva) => api.delete(`/reserva/${id_reserva}`)
 };
 
 export default sheets;
