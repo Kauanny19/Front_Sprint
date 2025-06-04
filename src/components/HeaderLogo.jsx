@@ -23,7 +23,7 @@ function Header() {
     { label: "MINHAS RESERVAS", path: "/minhasReservas" },
     { label: "TODAS AS SALAS", path: "/home" },
     { label: "MEU PERFIL", path: "/profile" },
-    { label: "EDITAR PERFIL", path: "/EditProfile" },
+    { label: "SAIR", path: "/" },
     
   ];
 

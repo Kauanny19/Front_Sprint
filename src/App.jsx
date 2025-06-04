@@ -8,7 +8,6 @@ import Sala from "./pages/Sala"
 import DefaultLayout from "./components/DefaultLayout";
 import MinhasReservas from "./pages/ShowReservas"
 import Profile from "./pages/Profile"
-import EditProfile from "./pages/EditProfile"
 
 function App() {
   return (
@@ -21,7 +20,6 @@ function App() {
         <Route path="/sala/:id" element={<ProtectedRoute><Sala/></ProtectedRoute>} />
         <Route path="/minhasReservas" element={<ProtectedRoute><MinhasReservas/></ProtectedRoute>}/>
         <Route path="/profile" element={<ProtectedRoute><Profile/></ProtectedRoute>}/>
-        <Route path="/EditProfile" element={<ProtectedRoute><EditProfile/></ProtectedRoute>}/>
         
       </Routes>
     </Router>

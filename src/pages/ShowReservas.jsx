@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
 import api from "../axios/axios";
-import { Box, Typography, Paper } from "@mui/material";
+import { Box, Typography, Paper, Button, Fade } from "@mui/material";
 
 function MinhasReservas() {
   const [reservas, setReservas] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [selectedReserva, setSelectedReserva] = useState(null);
 
   useEffect(() => {
     const fetchReservas = async () => {
@@ -54,8 +55,18 @@ function MinhasReservas() {
   const sortedDates = Object.keys(groupedReservations).sort((a, b) => {
     const [dayA, monthA, yearA] = a.split("/").map(Number);
     const [dayB, monthB, yearB] = b.split("/").map(Number);
-    return new Date(yearA, monthA - 1, dayA) - new Date(yearB, monthB - 1, dayB);
+    return (
+      new Date(yearA, monthA - 1, dayA) - new Date(yearB, monthB - 1, dayB)
+    );
   });
+
+  const handleDelete = (id) => {
+    console.log("Deletar reserva:", id);
+  };
+
+  const handleUpdate = (reserva) => {
+    console.log("Atualizar reserva:", reserva);
+  };
 
   return (
     <Box
@@ -65,6 +76,7 @@ function MinhasReservas() {
         background: "#f5f5f5",
         marginTop: "60px",
         minHeight: "calc(100vh - 120px)",
+        position: "relative",
       }}
     >
       <Box
@@ -119,7 +131,9 @@ function MinhasReservas() {
                       border: "1px solid #D32F2F",
                       display: "flex",
                       flexDirection: "column",
+                      cursor: "pointer",
                     }}
+                    onClick={() => setSelectedReserva(reserva)}
                   >
                     <Box
                       sx={{
@@ -130,7 +144,7 @@ function MinhasReservas() {
                         fontSize: "16px",
                       }}
                     >
-                      {reserva.nome_disciplina || "Disciplina"}
+                      {reserva.descricao || "Disciplina"}
                     </Box>
 
                     <Box
@@ -141,10 +155,10 @@ function MinhasReservas() {
                       }}
                     >
                       <Typography variant="body1" sx={{ mb: 1 }}>
-                        <strong>Sala:</strong> {reserva.numero_sala || "N/A"}
+                        <strong>Sala:</strong> {reserva.nomeSala || "N/A"}
                       </Typography>
                       <Typography variant="body1">
-                        <strong>Máx.:</strong> {reserva.capacidade_sala || "N/A"}
+                        <strong>Máx.:</strong> {reserva.capacidade || "N/A"}
                       </Typography>
                     </Box>
 
@@ -164,6 +178,110 @@ function MinhasReservas() {
               </Box>
             </Box>
           ))}
+        </Box>
+      )}
+
+      {/* Modal com reserva selecionada */}
+      {selectedReserva && (
+        <Box
+          sx={{
+            position: "fixed",
+            top: 0,
+            left: 0,
+            width: "100vw",
+            height: "100vh",
+            backgroundColor: "rgba(0, 0, 0, 0.5)",
+            zIndex: 998,
+          }}
+          onClick={() => setSelectedReserva(null)}
+        >
+          <Fade in={true}>
+            <Paper
+              elevation={4}
+              sx={{
+                position: "fixed",
+                top: "50%",
+                left: "50%",
+                transform: "translate(-50%, -50%)",
+                paddingTop: "72px",
+                paddingX: "20px",
+                paddingBottom: "20px",
+                backgroundColor: "#fff",
+                borderRadius: "8px",
+                minWidth: "300px",
+                overflow: "hidden",
+              }}
+              onClick={(e) => e.stopPropagation()}
+            >
+              {/* Cabeçalho */}
+              <Box
+                sx={{
+                  position: "absolute",
+                  top: 0,
+                  left: 0,
+                  width: "100%",
+                  backgroundColor: "#b22222",
+                  color: "white",
+                  padding: "12px 0",
+                  textAlign: "center",
+                  fontWeight: "bold",
+                  fontSize: "20px",
+                  borderTopLeftRadius: "8px",
+                  borderTopRightRadius: "8px",
+                }}
+              >
+                RESERVA
+              </Box>
+
+              <Typography align="center" sx={{ mt: 1 }}>
+                <strong>SALA:</strong> {selectedReserva.nomeSala}
+              </Typography>
+              <Typography align="center">
+                <strong>DATA:</strong>{" "}
+                {new Date(selectedReserva.data).toLocaleDateString("pt-BR")}
+              </Typography>
+              <Typography align="center">
+                <strong>HORÁRIO:</strong> {selectedReserva.horarioInicio} -{" "}
+                {selectedReserva.horarioFim}
+              </Typography>
+
+              <Box
+                sx={{ display: "flex", justifyContent: "space-between", mt: 3 }}
+              >
+                <Button
+                  variant="contained"
+                  sx={{
+                    backgroundColor: "#f8bfbf",
+                    color: "#b22222",
+                    fontWeight: "bold",
+                    "&:hover": { backgroundColor: "#f28c8c" },
+                  }}
+                  onClick={() => handleDelete(selectedReserva.id_reserva)}
+                >
+                  DELETAR
+                </Button>
+
+                <Button
+                  variant="contained"
+                  sx={{
+                    backgroundColor: "#bff8bf",
+                    color: "#2e7d32",
+                    fontWeight: "bold",
+                    "&:hover": { backgroundColor: "#94f294" },
+                  }}
+                  onClick={() => handleUpdate(selectedReserva)}
+                >
+                  ATUALIZAR
+                </Button>
+              </Box>
+
+              <Box sx={{ mt: 2, textAlign: "center" }}>
+                <Button variant="text" onClick={() => setSelectedReserva(null)}>
+                  Fechar
+                </Button>
+              </Box>
+            </Paper>
+          </Fade>
         </Box>
       )}
     </Box>

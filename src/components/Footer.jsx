@@ -5,7 +5,7 @@ function Footer(){
     return(
         <Box sx={{ 
             backgroundColor: "#C91E1E",
-            height: "50px",
+            height: "30px",
             width: "100%",
             position: "fixed",
             bottom: 0,

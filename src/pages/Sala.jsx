@@ -1,10 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
 import api from "../axios/axios";
 import { Button, Modal, Box, Typography } from "@mui/material";
 
 function Sala() {
-  const { id } = useParams();
   const [data, setData] = useState("");
   const [horarios, setHorarios] = useState([]);
   const [carregando, setCarregando] = useState(false);
@@ -12,6 +10,7 @@ function Sala() {
   const [modalOpen, setModalOpen] = useState(false);
   const [horarioReserva, setHorarioReserva] = useState(null);
   const id_usuario = localStorage.getItem("id_usuario");
+  const sala = JSON.parse(localStorage.getItem("salaSelecionada"));
 
   const getHorariosSalaReservada = async (data) => {
     if (!data) return;
@@ -19,7 +18,7 @@ function Sala() {
     setCarregando(true);
     setErro(null);
     try {
-      const response = await api.getHorariosSalaReservada(id, data);
+      const response = await api.getHorariosSalaReservada(sala.id_sala, data);
       const horariosDisponiveis = response.data.horarios.Disponiveis || [];
       const horariosIndisponiveis = response.data.horarios.Indisponiveis || [];
 
@@ -48,7 +47,7 @@ function Sala() {
     try {
       const response = await api.postReservarHorario({
         id_usuario: id_usuario,
-        fk_id_sala: id,
+        fk_id_sala: sala.id_sala,
         data: data,
         horarioInicio: horarioReserva.inicio,
         horarioFim: horarioReserva.fim,
@@ -59,7 +58,10 @@ function Sala() {
       setHorarioReserva(null);
       getHorariosSalaReservada(data);
     } catch (error) {
-      console.log("Erro ao realizar a reserva:", error.response?.data?.error || error.message);
+      console.log(
+        "Erro ao realizar a reserva:",
+        error.response?.data?.error || error.message
+      );
       alert(error.response?.data?.error || "Erro ao realizar a reserva.");
     }
   };
@@ -69,22 +71,60 @@ function Sala() {
   }, [data]);
 
   return (
-    <div style={{ fontFamily: "Arial", padding: "16px", background: "#f9f9f9", marginTop: "60px" }}>
-      <div style={{ background: "#b22222", color: "white", padding: "12px", borderRadius: "4px" }}>
-        <h1 style={{ margin: 0 }}> Reserva para Sala {id}</h1>
+    <div
+      style={{
+        fontFamily: "Arial",
+        background: "#ffecec",
+        minHeight: "100vh",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+      }}
+    >
+      <div
+        style={{
+          background: "#ffc6c6",
+          color: "black",
+          padding: "12px 24px",
+          width: "96%",
+          textAlign: "left",
+          fontWeight: "bold",
+          fontSize: "20px",
+          marginTop: "70px",
+        }}
+      >
+        <h5 style={{ margin: 0 }}>{sala.descricao}</h5>
       </div>
 
-      <div style={{ marginTop: "16px" }}>
-        <label><strong> Escolha a data: </strong></label>
-        <input
-          type="date"
-          value={data}
-          onChange={(e) => setData(e.target.value)}
-          style={{ marginLeft: "8px", padding: "4px" }}
-        />
+      <div style={{ marginTop: "24px", marginLeft:"30px", textAlign: "left", width: "100%" }}>
+        <label style={{ fontWeight: "bold", fontSize: "18px" }}>
+          Selecione a data:
+        </label>
+        <div>
+          <input
+            type="date"
+            value={data}
+            onChange={(e) => setData(e.target.value)}
+            style={{
+              marginTop: "8px",
+              padding: "6px",
+              backgroundColor: "#d9d9d9",
+              border: "none",
+              borderRadius: "5px",
+              fontSize: "16px",
+            }}
+          />
+        </div>
       </div>
 
-      <div style={{ marginTop: "20px", backgroundColor: "#ffecec", padding: "16px", borderRadius: "8px" }}>
+      <div
+        style={{
+          marginTop: "20px",
+          backgroundColor: "#ffecec",
+          padding: "16px",
+          borderRadius: "8px",
+        }}
+      >
         {carregando ? (
           <p>Carregando horários...</p>
         ) : erro ? (
@@ -92,53 +132,56 @@ function Sala() {
         ) : horarios.length > 0 ? (
           <>
             {/* Horários Disponíveis */}
-            <Typography variant="h6" sx={{ mb: 1 }}>
-              Horários Disponíveis
-            </Typography>
-            <div style={{ display: "flex", flexWrap: "wrap", gap: "12px", marginBottom: "24px" }}>
-              {horarios.filter(h => !h.reservado).map((h, index) => {
-                const selecionado = horarioReserva?.inicio === h.inicio && horarioReserva?.fim === h.fim;
-                return (
+            <div
+              style={{
+                display: "flex",
+                flexWrap: "wrap",
+                gap: "12px",
+                marginBottom: "24px",
+              }}
+            >
+              {horarios
+                .filter((h) => !h.reservado)
+                .map((h, index) => {
+                  const selecionado =
+                    horarioReserva?.inicio === h.inicio &&
+                    horarioReserva?.fim === h.fim;
+                  return (
+                    <Button
+                      key={`disp-${index}`}
+                      variant="outlined"
+                      onClick={() => setHorarioReserva(h)}
+                      sx={{
+                        minWidth: "100px",
+                        border: selecionado
+                          ? "2px solid #b22222"
+                          : "1px solid #a5d6a7",
+                        backgroundColor: "#a5d6a7",
+                        color: "black",
+                        "&:hover": {
+                          backgroundColor: "#81c784",
+                        },
+                      }}
+                    >
+                      {h.inicio} - {h.fim}
+                    </Button>
+                  );
+                })}
+                {horarios
+                .filter((h) => h.reservado)
+                .map((h, index) => (
                   <Button
-                    key={`disp-${index}`}
-                    variant="outlined"
-                    onClick={() => setHorarioReserva(h)}
+                    key={`indisp-${index}`}
+                    variant="contained"
                     sx={{
                       minWidth: "100px",
-                      border: selecionado ? "2px solid #b22222" : "1px solid gray",
-                      backgroundColor: "#a5d6a7",
+                      backgroundColor: "#E56565",
                       color: "black",
-                      "&:hover": {
-                        backgroundColor: "#81c784",
-                      },
                     }}
                   >
                     {h.inicio} - {h.fim}
                   </Button>
-                );
-              })}
-            </div>
-
-            {/* Horários Já Reservados */}
-            <Typography variant="h6" sx={{ mb: 1 }}>
-              Horários Já Reservados
-            </Typography>
-            <div style={{ display: "flex", flexWrap: "wrap", gap: "12px" }}>
-              {horarios.filter(h => h.reservado).map((h, index) => (
-                <Button
-                  key={`indisp-${index}`}
-                  variant="contained"
-                  disabled
-                  sx={{
-                    minWidth: "100px",
-                    backgroundColor: "#f44336",
-                    color: "white",
-                    opacity: 0.9,
-                  }}
-                >
-                  {h.inicio} - {h.fim}
-                </Button>
-              ))}
+                ))}
             </div>
           </>
         ) : data ? (
@@ -199,7 +242,7 @@ function Sala() {
 
           <Box sx={{ padding: "16px", textAlign: "center" }}>
             <Typography variant="body1" sx={{ mb: 1 }}>
-              SALA: {`Sala ${id}`}
+              SALA: {`${sala.numero}`}
             </Typography>
             <Typography variant="body1" sx={{ mb: 1 }}>
               DATA: {new Date(data).toLocaleDateString("pt-BR")}

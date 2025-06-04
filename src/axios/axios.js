@@ -10,7 +10,6 @@ api.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem("token");
     if (token) {
-      // CORREÇÃO AQUI: Removemos o prefixo 'Bearer '
       config.headers.Authorization = token; 
     }
     return config;
@@ -20,8 +19,8 @@ api.interceptors.request.use(
 
 const sheets = {
   postLogin: (user) => api.post("/user/login", user),
-  // Mantemos a chamada sem ID na URL, pois o backend usa o token para identificar
-  updateUser: (data) => api.put('/user/', data), 
+
+  updateUser: (data) => api.put(`/user/`, data),
   getUserByID: (id_usuario) => api.get(`/user/${id_usuario}`),
   postCadastro: (user) => api.post("/user", user),
   postReservarHorario: (reserva) => api.post("/reserva", reserva),

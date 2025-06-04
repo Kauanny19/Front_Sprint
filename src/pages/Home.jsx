@@ -13,6 +13,7 @@ function ListSalas() {
   const navigate = useNavigate();
 
  const handleSalaSelect = (sala) => {
+  localStorage.setItem("salaSelecionada", JSON.stringify(sala));
   navigate(`/sala/${sala.id_sala}`);
 }
 

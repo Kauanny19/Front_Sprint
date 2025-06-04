@@ -1,5 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { Box, Typography, TextField, Button, CircularProgress, Alert } from "@mui/material";
+import {
+  Box,
+  Typography,
+  TextField,
+  Button,
+  CircularProgress,
+  Alert,
+} from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import api from "../axios/axios"; // Assumindo que 'api' tem o método para atualizar o usuário
 import DefaultLayout from "../components/DefaultLayout";
@@ -9,7 +16,7 @@ const MeuPerfil = () => {
     nome: "",
     senha: "", // Para o input de senha
     email: "",
-    cpf: ""
+    cpf: "",
   });
   const [isEditing, setIsEditing] = useState(false); // Novo estado para controlar o modo de edição
   const [loading, setLoading] = useState(true);
@@ -32,12 +39,11 @@ const MeuPerfil = () => {
         setError(null); // Limpa erros anteriores
         const response = await api.getUserByID(id_usuario); // Essa requisição já usará o token
         console.log("Dados do usuário retornados da API:", response.data);
-        // Ao carregar, não preenchemos a senha por segurança
         setUserData({
           nome: response.data.user.nome || "",
           email: response.data.user.email || "",
           cpf: response.data.user.cpf || "",
-          senha: "" // Sempre inicia vazio para edição de senha
+          senha: "", // Sempre inicia vazio para edição de senha
         });
       } catch (err) {
         console.error("Erro ao buscar usuário:", err);
@@ -68,16 +74,17 @@ const MeuPerfil = () => {
     setError(null); // Limpa mensagens de erro
     setSuccess(false); // Limpa mensagens de sucesso
     const id_usuario = localStorage.getItem("id_usuario");
-    api.getUserByID(id_usuario) // Essa requisição já usará o token
-        .then(response => {
-            setUserData({
-                nome: response.data.user.nome || "",
-                email: response.data.user.email || "",
-                cpf: response.data.user.cpf || "",
-                senha: ""
-            });
-        })
-        .catch(err => console.error("Erro ao recarregar dados:", err));
+    api
+      .getUserByID(id_usuario) // Essa requisição já usará o token
+      .then((response) => {
+        setUserData({
+          nome: response.data.user.nome || "",
+          email: response.data.user.email || "",
+          cpf: response.data.user.cpf || "",
+          senha: "",
+        });
+      })
+      .catch((err) => console.error("Erro ao recarregar dados:", err));
   };
 
   const handleChange = (e) => {
@@ -94,36 +101,39 @@ const MeuPerfil = () => {
     setSuccess(false);
 
     try {
+      const id_usuario = localStorage.getItem("id_usuario");
+
       const dataToUpdate = {
         nome: userData.nome,
         email: userData.email,
+        cpf: userData.cpf, // <-- ADICIONADO: Incluir o CPF aqui
+        id: id_usuario,
       };
 
       if (userData.senha) {
         dataToUpdate.senha = userData.senha;
       }
 
-      // Esta chamada para updateUser já usará o token do interceptor
-      await api.updateUser(dataToUpdate); 
-      
+      await api.updateUser(dataToUpdate);
+
       setSuccess(true);
-      setIsEditing(false); 
-      // Recarrega os dados do usuário após a atualização, também usando o token
-      const id_usuario = localStorage.getItem("id_usuario");
+      setIsEditing(false);
+
       const response = await api.getUserByID(id_usuario);
       setUserData({
+        id_usuario: response.data.user.id_usuario || "",
         nome: response.data.user.nome || "",
         email: response.data.user.email || "",
         cpf: response.data.user.cpf || "",
-        senha: ""
+        senha: "",
       });
-
     } catch (err) {
       console.error("Erro ao atualizar perfil:", err);
-      setError("Erro ao atualizar o perfil. Verifique seus dados e tente novamente.");
+      setError(
+        "Erro ao atualizar o perfil. Verifique seus dados e tente novamente."
+      );
       if (err.response?.data) {
-        console.error("Detalhes do erro da API:", err.response.data);
-        setError(err.response.data.message || error);
+        setError(err.response.data.error || "Erro ao atualizar o perfil.");
       }
     } finally {
       setSaving(false);
@@ -133,7 +143,15 @@ const MeuPerfil = () => {
   if (loading) {
     return (
       <DefaultLayout headerRender={1}>
-        <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '100vh', backgroundColor: "#FFE9E9" }}>
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            minHeight: "100vh",
+            backgroundColor: "#FFE9E9",
+          }}
+        >
           <CircularProgress sx={{ color: "#B9181D" }} />
         </Box>
       </DefaultLayout>
@@ -149,7 +167,7 @@ const MeuPerfil = () => {
           display: "flex",
           flexDirection: "column",
           paddingTop: "60px",
-          paddingBottom: "60px"
+          paddingBottom: "60px",
         }}
       >
         <Box
@@ -158,7 +176,7 @@ const MeuPerfil = () => {
             justifyContent: "center",
             alignItems: "center",
             flex: 1,
-            padding: 2
+            padding: 2,
           }}
         >
           <Box
@@ -170,7 +188,7 @@ const MeuPerfil = () => {
               padding: 3,
               display: "flex",
               flexDirection: "column",
-              alignItems: "center"
+              alignItems: "center",
             }}
           >
             <Box
@@ -183,7 +201,7 @@ const MeuPerfil = () => {
                 justifyContent: "center",
                 alignItems: "center",
                 border: "3px solid white",
-                marginBottom: 2
+                marginBottom: 2,
               }}
             >
               <svg
@@ -211,14 +229,22 @@ const MeuPerfil = () => {
                 color: "white",
                 fontWeight: "bold",
                 marginBottom: 3,
-                textAlign: "center"
+                textAlign: "center",
               }}
             >
               {userData.nome || "NOME DO USUÁRIO"}
             </Typography>
 
-            {error && <Alert severity="error" sx={{ width: "100%", marginBottom: 2 }}>{error}</Alert>}
-            {success && <Alert severity="success" sx={{ width: "100%", marginBottom: 2 }}>Perfil atualizado com sucesso!</Alert>}
+            {error && (
+              <Alert severity="error" sx={{ width: "100%", marginBottom: 2 }}>
+                {error}
+              </Alert>
+            )}
+            {success && (
+              <Alert severity="success" sx={{ width: "100%", marginBottom: 2 }}>
+                Perfil atualizado com sucesso!
+              </Alert>
+            )}
 
             {/* Nome */}
             <Box sx={{ width: "100%", marginBottom: 1 }}>
@@ -233,7 +259,7 @@ const MeuPerfil = () => {
                 disabled={!isEditing}
                 sx={textFieldStyle}
                 InputProps={{
-                  style: { color: '#333' }
+                  style: { color: "#333" },
                 }}
               />
             </Box>
@@ -252,7 +278,7 @@ const MeuPerfil = () => {
                 disabled={!isEditing}
                 sx={textFieldStyle}
                 InputProps={{
-                  style: { color: '#333' }
+                  style: { color: "#333" },
                 }}
               />
             </Box>
@@ -260,7 +286,7 @@ const MeuPerfil = () => {
             {/* Senha */}
             <Box sx={{ width: "100%", marginBottom: 2 }}>
               <Typography variant="body1" sx={labelStyle}>
-                {isEditing ? "NOVA SENHA" : "SENHA"}
+                {"NOVA SENHA"}
               </Typography>
               <TextField
                 fullWidth
@@ -269,16 +295,16 @@ const MeuPerfil = () => {
                 value={isEditing ? userData.senha : "********"}
                 onChange={handleChange}
                 disabled={!isEditing}
-                placeholder={isEditing ? "Deixe em branco para manter a senha atual" : ""}
+                placeholder={"Digite a nova senha"}
                 sx={textFieldStyle}
                 InputProps={{
-                  style: { color: '#333' }
+                  style: { color: "#333" },
                 }}
               />
             </Box>
 
             {/* CPF - Desabilitado sempre */}
-            <Box sx={{ width: "100%", marginBottom: 2 }}>
+            <Box sx={{ width: "100%", marginBottom: 3 }}>
               <Typography variant="body1" sx={labelStyle}>
                 CPF
               </Typography>
@@ -289,13 +315,19 @@ const MeuPerfil = () => {
                 disabled
                 sx={textFieldStyle}
                 InputProps={{
-                  style: { WebkitTextFillColor: "#333", fontWeight: "medium" }
+                  style: { WebkitTextFillColor: "#333", fontWeight: "medium" },
                 }}
               />
             </Box>
 
             {isEditing ? (
-              <Box sx={{ width: "100%", display: "flex", justifyContent: "space-between" }}>
+              <Box
+                sx={{
+                  width: "100%",
+                  display: "flex",
+                  justifyContent: "space-between",
+                }}
+              >
                 <Button
                   variant="contained"
                   onClick={handleSaveClick}
@@ -308,11 +340,15 @@ const MeuPerfil = () => {
                     width: "48%",
                     borderRadius: 1,
                     "&:hover": {
-                      backgroundColor: "#f0f0f0"
-                    }
+                      backgroundColor: "#f0f0f0",
+                    },
                   }}
                 >
-                  {saving ? <CircularProgress size={24} sx={{ color: "#B9181D" }} /> : "Salvar"}
+                  {saving ? (
+                    <CircularProgress size={24} sx={{ color: "#B9181D" }} />
+                  ) : (
+                    "Salvar"
+                  )}
                 </Button>
                 <Button
                   variant="outlined"
@@ -325,8 +361,8 @@ const MeuPerfil = () => {
                     width: "48%",
                     borderRadius: 1,
                     "&:hover": {
-                      backgroundColor: "rgba(255, 255, 255, 0.1)"
-                    }
+                      backgroundColor: "rgba(255, 255, 255, 0.1)",
+                    },
                   }}
                 >
                   Cancelar
@@ -341,12 +377,12 @@ const MeuPerfil = () => {
                   color: "#B9181D",
                   fontWeight: "bold",
                   padding: "10px 20px",
-                  marginBottom: "25px",
+                  marginBottom: "7px",
                   width: "100%",
                   borderRadius: 1,
                   "&:hover": {
-                    backgroundColor: "#f0f0f0"
-                  }
+                    backgroundColor: "#f0f0f0",
+                  },
                 }}
               >
                 Editar Perfil
@@ -366,14 +402,13 @@ const MeuPerfil = () => {
                   borderRadius: 1,
                   marginTop: isEditing ? 0 : "25px",
                   "&:hover": {
-                    backgroundColor: "#f0f0f0"
-                  }
+                    backgroundColor: "#f0f0f0",
+                  },
                 }}
               >
                 Minhas reservas
               </Button>
             )}
-
           </Box>
         </Box>
       </Box>
@@ -387,7 +422,7 @@ const labelStyle = {
   color: "white",
   marginBottom: 0.5,
   marginRight: "auto",
-  fontWeight: "bold"
+  fontWeight: "bold",
 };
 
 const textFieldStyle = {
@@ -396,10 +431,10 @@ const textFieldStyle = {
   borderRadius: 1,
   "& .MuiInputBase-input": {
     color: "#333",
-    fontWeight: "medium"
+    fontWeight: "medium",
   },
   "& .MuiInputBase-input.Mui-disabled": {
     WebkitTextFillColor: "#333",
-    fontWeight: "medium"
-  }
+    fontWeight: "medium",
+  },
 };
