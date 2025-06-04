@@ -8,19 +8,19 @@ import {
   Alert,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import api from "../axios/axios"; // Assumindo que 'api' tem o método para atualizar o usuário
+import api from "../axios/axios";
 import DefaultLayout from "../components/DefaultLayout";
 
 const MeuPerfil = () => {
   const [userData, setUserData] = useState({
     nome: "",
-    senha: "", // Para o input de senha
+    senha: "",
     email: "",
     cpf: "",
   });
-  const [isEditing, setIsEditing] = useState(false); // Novo estado para controlar o modo de edição
+  const [isEditing, setIsEditing] = useState(false);
   const [loading, setLoading] = useState(true);
-  const [saving, setSaving] = useState(false); // Novo estado para o processo de salvamento
+  const [saving, setSaving] = useState(false);
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(false);
   const navigate = useNavigate();
@@ -36,21 +36,17 @@ const MeuPerfil = () => {
     const getUserInfo = async () => {
       try {
         setLoading(true);
-        setError(null); // Limpa erros anteriores
-        const response = await api.getUserByID(id_usuario); // Essa requisição já usará o token
-        console.log("Dados do usuário retornados da API:", response.data);
+        setError(null);
+        const response = await api.getUserByID(id_usuario);
         setUserData({
           nome: response.data.user.nome || "",
           email: response.data.user.email || "",
           cpf: response.data.user.cpf || "",
-          senha: "", // Sempre inicia vazio para edição de senha
+          senha: "",
         });
       } catch (err) {
         console.error("Erro ao buscar usuário:", err);
         setError("Não foi possível carregar os dados do usuário.");
-        if (err.response?.data) {
-          console.log("Detalhes do erro:", err.response.data);
-        }
       } finally {
         setLoading(false);
       }
@@ -64,18 +60,18 @@ const MeuPerfil = () => {
   };
 
   const handleEditClick = () => {
-    setIsEditing(true); // Entra no modo de edição
-    setError(null); // Limpa mensagens de erro ao entrar no modo de edição
-    setSuccess(false); // Limpa mensagens de sucesso
+    setIsEditing(true);
+    setError(null);
+    setSuccess(false);
   };
 
   const handleCancelClick = () => {
-    setIsEditing(false); // Sai do modo de edição
-    setError(null); // Limpa mensagens de erro
-    setSuccess(false); // Limpa mensagens de sucesso
+    setIsEditing(false);
+    setError(null);
+    setSuccess(false);
     const id_usuario = localStorage.getItem("id_usuario");
     api
-      .getUserByID(id_usuario) // Essa requisição já usará o token
+      .getUserByID(id_usuario)
       .then((response) => {
         setUserData({
           nome: response.data.user.nome || "",
@@ -106,7 +102,7 @@ const MeuPerfil = () => {
       const dataToUpdate = {
         nome: userData.nome,
         email: userData.email,
-        cpf: userData.cpf, // <-- ADICIONADO: Incluir o CPF aqui
+        cpf: userData.cpf,
         id: id_usuario,
       };
 
@@ -130,11 +126,8 @@ const MeuPerfil = () => {
     } catch (err) {
       console.error("Erro ao atualizar perfil:", err);
       setError(
-        "Erro ao atualizar o perfil. Verifique seus dados e tente novamente."
+        err.response?.data?.error || "Erro ao atualizar o perfil. Verifique seus dados e tente novamente."
       );
-      if (err.response?.data) {
-        setError(err.response.data.error || "Erro ao atualizar o perfil.");
-      }
     } finally {
       setSaving(false);
     }
@@ -258,9 +251,6 @@ const MeuPerfil = () => {
                 onChange={handleChange}
                 disabled={!isEditing}
                 sx={textFieldStyle}
-                InputProps={{
-                  style: { color: "#333" },
-                }}
               />
             </Box>
 
@@ -277,16 +267,13 @@ const MeuPerfil = () => {
                 onChange={handleChange}
                 disabled={!isEditing}
                 sx={textFieldStyle}
-                InputProps={{
-                  style: { color: "#333" },
-                }}
               />
             </Box>
 
             {/* Senha */}
             <Box sx={{ width: "100%", marginBottom: 2 }}>
               <Typography variant="body1" sx={labelStyle}>
-                {"NOVA SENHA"}
+                {isEditing ? "NOVA SENHA" : "SENHA"}
               </Typography>
               <TextField
                 fullWidth
@@ -295,15 +282,12 @@ const MeuPerfil = () => {
                 value={isEditing ? userData.senha : "********"}
                 onChange={handleChange}
                 disabled={!isEditing}
-                placeholder={"Digite a nova senha"}
+                placeholder={isEditing ? "Digite a nova senha" : ""}
                 sx={textFieldStyle}
-                InputProps={{
-                  style: { color: "#333" },
-                }}
               />
             </Box>
 
-            {/* CPF - Desabilitado sempre */}
+            {/* CPF */}
             <Box sx={{ width: "100%", marginBottom: 3 }}>
               <Typography variant="body1" sx={labelStyle}>
                 CPF
@@ -314,9 +298,6 @@ const MeuPerfil = () => {
                 value={userData.cpf || ""}
                 disabled
                 sx={textFieldStyle}
-                InputProps={{
-                  style: { WebkitTextFillColor: "#333", fontWeight: "medium" },
-                }}
               />
             </Box>
 
@@ -400,7 +381,7 @@ const MeuPerfil = () => {
                   padding: "10px 20px",
                   width: "100%",
                   borderRadius: 1,
-                  marginTop: isEditing ? 0 : "25px",
+                  marginTop: "25px",
                   "&:hover": {
                     backgroundColor: "#f0f0f0",
                   },
