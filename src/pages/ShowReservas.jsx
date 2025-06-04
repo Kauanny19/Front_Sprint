@@ -130,7 +130,7 @@ function MinhasReservas() {
                         fontSize: "16px",
                       }}
                     >
-                      {reserva.nome_disciplina || "Disciplina"}
+                      {reserva.descricao || "Disciplina"}
                     </Box>
 
                     <Box
@@ -141,10 +141,10 @@ function MinhasReservas() {
                       }}
                     >
                       <Typography variant="body1" sx={{ mb: 1 }}>
-                        <strong>Sala:</strong> {reserva.numero_sala || "N/A"}
+                        <strong>Sala:</strong> {reserva.nomeSala || "N/A"}
                       </Typography>
                       <Typography variant="body1">
-                        <strong>Máx.:</strong> {reserva.capacidade_sala || "N/A"}
+                        <strong>Máx.:</strong> {reserva.capacidade || "N/A"}
                       </Typography>
                     </Box>
 
