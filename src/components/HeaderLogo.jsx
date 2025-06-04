@@ -20,11 +20,9 @@ function Header() {
   // Define o nome e a rota de cada item
   const menuItems = [
     { label: "HOME", path: "/home" },
-    { label: "MINHAS RESERVAS", path: "/minhasReservas" },
-    { label: "TODAS AS SALAS", path: "/home" },
     { label: "MEU PERFIL", path: "/profile" },
+    { label: "MINHAS RESERVAS", path: "/minhasReservas" },
     { label: "SAIR", path: "/" },
-    
   ];
 
   return (
@@ -41,36 +39,35 @@ function Header() {
           display: "flex",
           justifyContent: "flex-start",
           alignItems: "center",
-          px: 2,
           zIndex: 1300,
         }}
       >
         <IconButton onClick={toggleDrawer(true)}>
           <AccountCircleIcon fontSize="large" sx={{ color: "white" }} />
         </IconButton>
-
-        
       </Box>
 
       {/* DRAWER LATERAL */}
       <Drawer anchor="left" open={drawerOpen} onClose={toggleDrawer(false)}>
         <Box
-          sx={{ width: 250, backgroundColor: "#B71C1C", height: "100%" }}
+          sx={{ width: 250, backgroundColor: "#C91E1E", height: "100%" }}
           role="presentation"
         >
-          <List>
+          <List style={{marginTop:45}}>
             {menuItems.map((item) => (
               <ListItem
                 button
                 key={item.label}
                 onClick={() => {
-                  navigate(item.path);  // NAVEGA PARA A ROTA
+                  navigate(item.path); // NAVEGA PARA A ROTA
                   setDrawerOpen(false); // FECHA O DRAWER
                 }}
               >
                 <ListItemText
                   primary={item.label}
-                  primaryTypographyProps={{ sx: { color: "white", fontWeight: "bold" } }}
+                  primaryTypographyProps={{
+                    sx: { color: "white", fontWeight: "bold" },
+                  }}
                 />
               </ListItem>
             ))}
