@@ -7,6 +7,8 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import api from "../axios/axios";
 import senaiLogo from "../assets/senai_logo.png";
+import fotologin1 from "../assets/fotologin1.png";
+import fotologin2 from "../assets/fotologin2.png";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 
@@ -16,6 +18,7 @@ function Login() {
     senha: "",
   });
   const navigate = useNavigate();
+
   const onChange = (event) => {
     const { name, value } = event.target;
     setUser({ ...user, [name]: value });
@@ -30,10 +33,10 @@ function Login() {
     await api.postLogin(user).then(
       (response) => {
         alert(response.data.message);
-        localStorage.setItem('authenticated', true)
-        localStorage.setItem("token", response.data.token)
-        localStorage.setItem("id_usuario",  response.data.user.id_usuario);
-        navigate("home/")
+        localStorage.setItem("authenticated", true);
+        localStorage.setItem("token", response.data.token);
+        localStorage.setItem("id_usuario", response.data.user.id_usuario);
+        navigate("home/");
       },
       (error) => {
         console.log(error);
@@ -43,53 +46,43 @@ function Login() {
   }
 
   return (
-    <Box sx={{ 
-      height: "100vh", 
-      backgroundColor: "#FFE9E9", 
-      display: "flex", 
-      flexDirection: "column",
-      
-    }}>
-      
-      <Header/>
+    <Box sx={{ height: "100vh", backgroundColor: "#FFE9E9", display: "flex", flexDirection: "column" }}>
+      <Header />
 
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          position: "fixed",
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-        }}
-      >
+      <Box sx={{ display: "flex", flexGrow: 1, height: "100%" }}>
+        {/* Imagem esquerda como plano de fundo */}
         <Box
           sx={{
+            flex: 1,
+            backgroundImage: `url(${fotologin1})`,
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+            backgroundRepeat: "no-repeat",
+          }}
+        />
+
+        {/* Formulário central */}
+        <Box
+          sx={{
+            width: "360px",
+            backgroundColor: "#AE0000",
             display: "flex",
             flexDirection: "column",
+            justifyContent: "center",
             alignItems: "center",
-            backgroundColor: "#AE0000",
-            padding: 2.5,
-            borderRadius: 2,
-            height:"350px",
-            width: "320px", // Tamanho fixo mais reduzido
-            maxHeight: "80vh",
+            padding: 3,
           }}
         >
-          <Box sx={{ mt: 2  }}>
-            <img
-              src={senaiLogo}
-              alt="SENAI Logo"
-              style={{ height: "55px", borderRadius: 2 }}
-            />
-          </Box>
+          <img
+            src={senaiLogo}
+            alt="SENAI Logo"
+            style={{ height: "55px", borderRadius: 2 }}
+          />
 
-          <Box 
-            component="form" 
-            sx={{ mt: 3, width: "100%" }} 
-            onSubmit={handleSubmit} 
+          <Box
+            component="form"
+            sx={{ mt: 3, width: "100%" }}
+            onSubmit={handleSubmit}
             noValidate
           >
             <TextField
@@ -138,22 +131,27 @@ function Login() {
               Login
             </Button>
 
-            <Box sx={{ 
-                display: "flex", 
-                alignItems: "center", 
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
                 justifyContent: "center",
                 color: "white",
                 fontSize: "13px",
-              }}>
-              <Typography variant="body2" sx={{ color: "white", mr: 1, fontSize: "13px" }}>
+              }}
+            >
+              <Typography
+                variant="body2"
+                sx={{ color: "white", mr: 1, fontSize: "13px" }}
+              >
                 Não tem cadastro?
               </Typography>
-              <Link 
-                to="/cadastro" 
-                style={{ 
-                  color: "#FF9696", 
-                  textDecoration: "none", 
-                  fontFamily: "Arial, sans-serif"
+              <Link
+                to="/cadastro"
+                style={{
+                  color: "#FF9696",
+                  textDecoration: "none",
+                  fontFamily: "Arial, sans-serif",
                 }}
               >
                 Cadastrar-se
@@ -161,11 +159,22 @@ function Login() {
             </Box>
           </Box>
         </Box>
+
+        {/* Imagem direita como plano de fundo */}
+        <Box
+          sx={{
+            flex: 1,
+            backgroundImage: `url(${fotologin2})`,
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+            backgroundRepeat: "no-repeat",
+          }}
+        />
       </Box>
 
-      <Footer/>
+      <Footer />
     </Box>
   );
 }
-export default Login;
 
+export default Login;

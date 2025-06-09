@@ -165,15 +165,6 @@ function ListSalas() {
               ))
           )}
         </Grid>
-
-        <Button
-          fullWidth
-          variant="contained"
-          onClick={logout}
-          style={{ marginTop: 10, marginBottom: 10, background: "#B92626" }}
-        >
-          SAIR
-        </Button>
       </Container>
 
       <Footer />

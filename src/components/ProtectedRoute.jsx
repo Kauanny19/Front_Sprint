@@ -6,5 +6,4 @@ const ProtectedRoute = ({children}) => {
     return isAuthenticated ? <DefaultLayout headerRender={2}>{children}</DefaultLayout> : <Navigate to="/" />;
 }
 
-
 export default ProtectedRoute;

@@ -7,6 +7,8 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import api from "../axios/axios";
 import senaiLogo from "../assets/senai_logo.png";
+import fotologin1 from "../assets/fotologin1.png";
+import fotologin2 from "../assets/fotologin2.png";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 
@@ -19,6 +21,7 @@ function Cadastro() {
   });
 
   const navigate = useNavigate();
+
   const onChange = (event) => {
     const { name, value } = event.target;
     setUser({ ...user, [name]: value });
@@ -51,43 +54,43 @@ function Cadastro() {
         flexDirection: "column",
       }}
     >
-      <Header/>
+      <Header />
 
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          position: "fixed",
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-        }}
-      >
+      <Box sx={{ display: "flex", flexGrow: 1, height: "100%" }}>
+        {/* Imagem esquerda como plano de fundo */}
         <Box
           sx={{
+            flex: 1,
+            backgroundImage: `url(${fotologin1})`,
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+            backgroundRepeat: "no-repeat",
+          }}
+        />
+
+        {/* Formulário central */}
+        <Box
+          sx={{
+            width: "360px",
+            backgroundColor: "#AE0000",
             display: "flex",
             flexDirection: "column",
+            justifyContent: "center",
             alignItems: "center",
-            backgroundColor: "#AE0000",
-            padding: 2.5, // Reduzido de 3 para 2.5
-            borderRadius: 2,
-            width: "320px", // Tamanho fixo mais reduzido
-            maxHeight: "80vh",
+            padding: 3,
           }}
         >
           <Box sx={{ marginBottom: 1 }}>
             <img
               src={senaiLogo}
               alt="SENAI Logo"
-              style={{ height: "55px", borderRadius: 2 }} // Reduzido de 55px para 45px
+              style={{ height: "55px", borderRadius: 2 }}
             />
           </Box>
 
           <Box
             component="form"
-            sx={{ mt: 0.5, width: "100%" }} // Reduzido de 1 para 0.5
+            sx={{ mt: 0.5, width: "100%" }}
             onSubmit={handleSubmit}
             noValidate
           >
@@ -100,7 +103,6 @@ function Cadastro() {
               margin="dense"
               value={user.nome}
               onChange={onChange}
-              //size="small"
               sx={{
                 marginBottom: 1,
                 backgroundColor: "white",
@@ -116,7 +118,6 @@ function Cadastro() {
               margin="dense"
               value={user.email}
               onChange={onChange}
-              //size="small" // Adicionado para diminuir ainda mais o tamanho
               sx={{
                 marginBottom: 1,
                 backgroundColor: "white",
@@ -132,7 +133,6 @@ function Cadastro() {
               margin="dense"
               value={user.cpf}
               onChange={onChange}
-              //size="small" // Adicionado para diminuir ainda mais o tamanho
               sx={{
                 marginBottom: 1,
                 backgroundColor: "white",
@@ -149,7 +149,6 @@ function Cadastro() {
               type="password"
               value={user.senha}
               onChange={onChange}
-              //size="small" // Adicionado para diminuir ainda mais o tamanho
               sx={{
                 marginBottom: 1,
                 backgroundColor: "white",
@@ -158,13 +157,13 @@ function Cadastro() {
             />
             <Button
               sx={{
-                mt: 0.5, 
-                mb: 1.5, 
+                mt: 0.5,
+                mb: 1.5,
                 backgroundColor: "#FF2A2A",
                 borderRadius: 1,
                 boxShadow: "none",
                 padding: "7px 12px",
-                fontSize: "13px", 
+                fontSize: "13px",
               }}
               fullWidth
               type="submit"
@@ -179,7 +178,7 @@ function Cadastro() {
                 alignItems: "center",
                 justifyContent: "center",
                 color: "white",
-                fontSize: "12px", // Texto menor para o link
+                fontSize: "12px",
               }}
             >
               <Typography variant="body2" sx={{ color: "white", mr: 1 }}>
@@ -198,10 +197,22 @@ function Cadastro() {
             </Box>
           </Box>
         </Box>
+
+        {/* Imagem direita como plano de fundo */}
+        <Box
+          sx={{
+            flex: 1,
+            backgroundImage: `url(${fotologin2})`,
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+            backgroundRepeat: "no-repeat",
+          }}
+        />
       </Box>
-      <Footer/>
+
+      <Footer />
     </Box>
   );
 }
-export default Cadastro;
 
+export default Cadastro;

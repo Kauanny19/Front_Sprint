@@ -10,6 +10,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import api from "../axios/axios";
 import DefaultLayout from "../components/DefaultLayout";
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 
 const MeuPerfil = () => {
   const [userData, setUserData] = useState({
@@ -126,10 +127,27 @@ const MeuPerfil = () => {
     } catch (err) {
       console.error("Erro ao atualizar perfil:", err);
       setError(
-        err.response?.data?.error || "Erro ao atualizar o perfil. Verifique seus dados e tente novamente."
+        err.response?.data?.error ||
+          "Erro ao atualizar o perfil. Verifique seus dados e tente novamente."
       );
     } finally {
       setSaving(false);
+    }
+  };
+
+  const handleDeleteAccount = async () => {
+    const confirmDelete = window.confirm("Tem certeza que deseja deletar seu perfil? Essa ação é irreversível.");
+    if (!confirmDelete) return;
+
+    try {
+      const id_usuario = localStorage.getItem("id_usuario");
+      await api.deleteUser(id_usuario);
+
+      localStorage.clear();
+      navigate("/");
+    } catch (err) {
+      console.error("Erro ao deletar usuário:", err);
+      alert("Erro ao deletar o perfil. Tente novamente.");
     }
   };
 
@@ -193,26 +211,10 @@ const MeuPerfil = () => {
                 display: "flex",
                 justifyContent: "center",
                 alignItems: "center",
-                border: "3px solid white",
                 marginBottom: 2,
               }}
             >
-              <svg
-                width="60"
-                height="60"
-                viewBox="0 0 24 24"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M12 12C14.7614 12 17 9.76142 17 7C17 4.23858 14.7614 2 12 2C9.23858 2 7 4.23858 7 7C7 9.76142 9.23858 12 12 12Z"
-                  fill="white"
-                />
-                <path
-                  d="M12 14C7.58172 14 4 17.5817 4 22H20C20 17.5817 16.4183 14 12 14Z"
-                  fill="white"
-                />
-              </svg>
+              <AccountCircleIcon sx={{ color: "white", fontSize: 140 }} />
             </Box>
 
             <Typography
@@ -239,67 +241,35 @@ const MeuPerfil = () => {
               </Alert>
             )}
 
-            {/* Nome */}
-            <Box sx={{ width: "100%", marginBottom: 1 }}>
-              <Typography variant="body1" sx={labelStyle}>
-                NOME
-              </Typography>
-              <TextField
-                fullWidth
-                name="nome"
-                value={userData.nome}
-                onChange={handleChange}
-                disabled={!isEditing}
-                sx={textFieldStyle}
-              />
-            </Box>
-
-            {/* Email */}
-            <Box sx={{ width: "100%", marginBottom: 1 }}>
-              <Typography variant="body1" sx={labelStyle}>
-                EMAIL
-              </Typography>
-              <TextField
-                fullWidth
-                name="email"
-                type="email"
-                value={userData.email}
-                onChange={handleChange}
-                disabled={!isEditing}
-                sx={textFieldStyle}
-              />
-            </Box>
-
-            {/* Senha */}
-            <Box sx={{ width: "100%", marginBottom: 2 }}>
-              <Typography variant="body1" sx={labelStyle}>
-                {isEditing ? "NOVA SENHA" : "SENHA"}
-              </Typography>
-              <TextField
-                fullWidth
-                name="senha"
-                type="password"
-                value={isEditing ? userData.senha : "********"}
-                onChange={handleChange}
-                disabled={!isEditing}
-                placeholder={isEditing ? "Digite a nova senha" : ""}
-                sx={textFieldStyle}
-              />
-            </Box>
-
-            {/* CPF */}
-            <Box sx={{ width: "100%", marginBottom: 3 }}>
-              <Typography variant="body1" sx={labelStyle}>
-                CPF
-              </Typography>
-              <TextField
-                fullWidth
-                name="cpf"
-                value={userData.cpf || ""}
-                disabled
-                sx={textFieldStyle}
-              />
-            </Box>
+            {/* Campos */}
+            {["nome", "email", "senha", "cpf"].map((field, index) => {
+              const isPassword = field === "senha";
+              const isCpf = field === "cpf";
+              const label = field.toUpperCase();
+              return (
+                <Box sx={{ width: "100%", marginBottom: 2 }} key={field}>
+                  <Typography variant="body1" sx={labelStyle}>
+                    {isPassword && !isEditing ? "SENHA" : isPassword ? "NOVA SENHA" : label}
+                  </Typography>
+                  <TextField
+                    fullWidth
+                    name={field}
+                    type={isPassword ? "password" : "text"}
+                    value={
+                      isPassword
+                        ? isEditing
+                          ? userData.senha
+                          : "********"
+                        : userData[field]
+                    }
+                    onChange={handleChange}
+                    disabled={!isEditing || isCpf}
+                    placeholder={isPassword && isEditing ? "Digite a nova senha" : ""}
+                    sx={textFieldStyle}
+                  />
+                </Box>
+              );
+            })}
 
             {isEditing ? (
               <Box
@@ -350,45 +320,69 @@ const MeuPerfil = () => {
                 </Button>
               </Box>
             ) : (
-              <Button
-                variant="contained"
-                onClick={handleEditClick}
-                sx={{
-                  backgroundColor: "white",
-                  color: "#B9181D",
-                  fontWeight: "bold",
-                  padding: "10px 20px",
-                  marginBottom: "7px",
-                  width: "100%",
-                  borderRadius: 1,
-                  "&:hover": {
-                    backgroundColor: "#f0f0f0",
-                  },
-                }}
-              >
-                Editar Perfil
-              </Button>
-            )}
+              <>
+                <Button
+                  variant="contained"
+                  onClick={handleMinhasReservas}
 
-            {!isEditing && (
-              <Button
-                variant="contained"
-                onClick={handleMinhasReservas}
-                sx={{
-                  backgroundColor: "white",
-                  color: "#B9181D",
-                  fontWeight: "bold",
-                  padding: "10px 20px",
-                  width: "100%",
-                  borderRadius: 1,
-                  marginTop: "25px",
-                  "&:hover": {
-                    backgroundColor: "#f0f0f0",
-                  },
-                }}
-              >
-                Minhas reservas
-              </Button>
+                  sx={{
+                    backgroundColor: "white",
+                    color: "#B9181D",
+                    fontWeight: "bold",
+                    padding: "10px 20px",
+                    marginBottom: "7px",
+                    width: "100%",
+                    borderRadius: 1,
+                    "&:hover": {
+                      backgroundColor: "#f0f0f0",
+                    },
+                  }}
+                >
+                  Minhas reservas
+                  
+                </Button>
+
+                <Button
+                  variant="contained"
+                  onClick={handleEditClick}
+                  sx={{
+                    backgroundColor: "white",
+                    color: "#B9181D",
+                    fontWeight: "bold",
+                    padding: "10px 20px",
+                    width: "100%",
+                    borderRadius: 1,
+                    marginTop: "15px",
+                    marginBottom: "10px",
+                    "&:hover": {
+                      backgroundColor: "#f0f0f0",
+                    },
+                  }}
+                >
+                  Editar Perfil
+                </Button>
+
+                <Button
+                  variant="outlined"
+                  color="error"
+                  onClick={handleDeleteAccount}
+                  sx={{
+                    backgroundColor: "white",
+                    color: "#B9181D",
+                    fontWeight: "bold",
+                    padding: "10px 20px",
+                    width: "100%",
+                    borderRadius: 1,
+                    marginTop: "15px",
+                    marginBottom: "10px",
+                    "&:hover": {
+                      backgroundColor: "#f0f0f0",
+                    },
+                  }}
+                >
+                  Deletar perfil
+                </Button>
+              </>
             )}
           </Box>
         </Box>
