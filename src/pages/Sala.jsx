@@ -245,7 +245,7 @@ function Sala() {
               SALA: {`${sala.numero}`}
             </Typography>
             <Typography variant="body1" sx={{ mb: 1 }}>
-              DATA: {new Date(data).toLocaleDateString("pt-BR")}
+              DATA: {new Date(data + 'T00:00:00').toLocaleDateString("pt-BR", { timeZone: 'UTC' })}
             </Typography>
             <Typography variant="body1" sx={{ mb: 2 }}>
               HORÁRIO: {horarioReserva?.inicio} - {horarioReserva?.fim}

@@ -33,10 +33,11 @@ function MinhasReservas() {
   const groupReservationsByDate = (reservations) => {
     const grouped = {};
     reservations.forEach((reserva) => {
-      const date = new Date(reserva.data).toLocaleDateString("pt-BR", {
+      const date = new Date(reserva.data + 'T00:00:00').toLocaleDateString("pt-BR", {
         day: "2-digit",
         month: "2-digit",
         year: "numeric",
+        timeZone: "UTC",
       });
       if (!grouped[date]) grouped[date] = [];
       grouped[date].push(reserva);
@@ -219,7 +220,7 @@ function MinhasReservas() {
               </Typography>
               <Typography align="center">
                 <strong>DATA:</strong>{" "}
-                {new Date(selectedReserva.data).toLocaleDateString("pt-BR")}
+                {new Date(selectedReserva.data + 'T00:00:00').toLocaleDateString("pt-BR", { timeZone: 'UTC' })}
               </Typography>
               <Typography align="center">
                 <strong>HORÁRIO:</strong> {selectedReserva.horarioInicio} -{" "}
