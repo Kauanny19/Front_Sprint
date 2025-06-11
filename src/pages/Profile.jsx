@@ -136,7 +136,9 @@ const MeuPerfil = () => {
   };
 
   const handleDeleteAccount = async () => {
-    const confirmDelete = window.confirm("Tem certeza que deseja deletar seu perfil? Essa ação é irreversível.");
+    const confirmDelete = window.confirm(
+      "Tem certeza que deseja deletar seu perfil? Essa ação é irreversível."
+    );
     if (!confirmDelete) return;
 
     try {
@@ -249,7 +251,11 @@ const MeuPerfil = () => {
               return (
                 <Box sx={{ width: "100%", marginBottom: 2 }} key={field}>
                   <Typography variant="body1" sx={labelStyle}>
-                    {isPassword && !isEditing ? "SENHA" : isPassword ? "NOVA SENHA" : label}
+                    {isPassword && !isEditing
+                      ? "SENHA"
+                      : isPassword
+                      ? "NOVA SENHA"
+                      : label}
                   </Typography>
                   <TextField
                     fullWidth
@@ -264,7 +270,9 @@ const MeuPerfil = () => {
                     }
                     onChange={handleChange}
                     disabled={!isEditing || isCpf}
-                    placeholder={isPassword && isEditing ? "Digite a nova senha" : ""}
+                    placeholder={
+                      isPassword && isEditing ? "Digite a nova senha" : ""
+                    }
                     sx={textFieldStyle}
                   />
                 </Box>
@@ -324,7 +332,6 @@ const MeuPerfil = () => {
                 <Button
                   variant="contained"
                   onClick={handleMinhasReservas}
-
                   sx={{
                     backgroundColor: "white",
                     color: "#B9181D",
@@ -339,7 +346,6 @@ const MeuPerfil = () => {
                   }}
                 >
                   Minhas reservas
-                  
                 </Button>
 
                 <Button

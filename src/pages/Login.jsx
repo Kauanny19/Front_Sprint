@@ -9,6 +9,7 @@ import api from "../axios/axios";
 import senaiLogo from "../assets/senai_logo.png";
 import fotologin1 from "../assets/fotologin1.png";
 import fotologin2 from "../assets/fotologin2.png";
+import fotologin3 from "../assets/fotologin3.png";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 
@@ -50,7 +51,6 @@ function Login() {
       <Header />
 
       <Box sx={{ display: "flex", flexGrow: 1, height: "100%" }}>
-        {/* Imagem esquerda como plano de fundo */}
         <Box
           sx={{
             flex: 1,
