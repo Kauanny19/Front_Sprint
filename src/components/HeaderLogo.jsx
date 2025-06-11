@@ -7,27 +7,34 @@ import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
 import Typography from "@mui/material/Typography";
-import { useNavigate } from "react-router-dom"; // IMPORTANTE
+import { useNavigate } from "react-router-dom";
 
 function Header() {
   const [drawerOpen, setDrawerOpen] = React.useState(false);
-  const navigate = useNavigate(); // HOOK DE NAVEGAÇÃO
+  const navigate = useNavigate();
 
   const toggleDrawer = (open) => () => {
     setDrawerOpen(open);
   };
 
-  // Define o nome e a rota de cada item
   const menuItems = [
     { label: "HOME", path: "/home" },
-    { label: "MEU PERFIL", path: "/profile" },
+    { label: "PERFIL", path: "/profile" },
     { label: "MINHAS RESERVAS", path: "/minhasReservas" },
     { label: "SAIR", path: "/" },
   ];
 
+  const handleMenuClick = (item) => {
+    if (item.label === "SAIR") {
+      const confirmExit = window.confirm("Tem certeza que deseja sair?");
+      if (!confirmExit) return; // Se cancelar, não navega
+    }
+    navigate(item.path);
+    setDrawerOpen(false);
+  };
+
   return (
     <>
-      {/* HEADER */}
       <Box
         sx={{
           backgroundColor: "#C91E1E",
@@ -47,21 +54,17 @@ function Header() {
         </IconButton>
       </Box>
 
-      {/* DRAWER LATERAL */}
       <Drawer anchor="left" open={drawerOpen} onClose={toggleDrawer(false)}>
         <Box
           sx={{ width: 250, backgroundColor: "#C91E1E", height: "100%" }}
           role="presentation"
         >
-          <List style={{marginTop:45}}>
+          <List style={{ marginTop: 45 }}>
             {menuItems.map((item) => (
               <ListItem
                 button
                 key={item.label}
-                onClick={() => {
-                  navigate(item.path); // NAVEGA PARA A ROTA
-                  setDrawerOpen(false); // FECHA O DRAWER
-                }}
+                onClick={() => handleMenuClick(item)}
               >
                 <ListItemText
                   primary={item.label}

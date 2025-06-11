@@ -164,7 +164,7 @@ function Login() {
         <Box
           sx={{
             flex: 1,
-            backgroundImage: `url(${fotologin2})`,
+            backgroundImage: `url(${fotologin3})`,
             backgroundSize: "cover",
             backgroundPosition: "center",
             backgroundRepeat: "no-repeat",

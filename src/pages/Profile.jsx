@@ -244,7 +244,7 @@ const MeuPerfil = () => {
             )}
 
             {/* Campos */}
-            {["nome", "email", "senha", "cpf"].map((field, index) => {
+            {["email", "senha", "cpf"].map((field, index) => {
               const isPassword = field === "senha";
               const isCpf = field === "cpf";
               const label = field.toUpperCase();
